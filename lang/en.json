@@ -1,0 +1,31 @@
+{
+  "auth.login.title": "Sign in",
+  "auth.login.email": "Email",
+  "auth.login.password": "Password",
+  "auth.login.remember": "Remember me",
+  "auth.login.forgot": "Forgot password?",
+  "auth.login.submit": "Sign in",
+  "auth.login.no_account_title": "Don’t have an account?",
+  "auth.login.create_account": "Create account",
+  "auth.login.hero_line1": "Welcome! Don’t have an account?",
+  "auth.login.hero_line2": "Join our leading platform in the Arab world",
+
+  "auth.register.title": "Register",
+  "auth.register.name": "Full name",
+  "auth.register.email": "Email",
+  "auth.register.password": "Password",
+  "auth.register.password_confirm": "Confirm password",
+  "auth.register.level_fresh": "Fresh graduate",
+  "auth.register.level_mid": "Mid-level",
+  "auth.register.level_consultant": "Consultant",
+  "auth.register.have_account_title": "Have an account?",
+  "auth.register.sign_in": "Sign in",
+  "auth.register.agree_prefix": "I agree to the",
+  "auth.register.terms": "terms",
+  "auth.register.submit": "Create Account",
+  "auth.register.hero_line1": "Welcome! We’re glad you’re joining",
+  "auth.register.hero_line2": "our leading platform in the Arab world"
+  ,
+  "navbar.login": "Login",
+  "navbar.register": "Register"
+}

@@ -1,0 +1,31 @@
+{
+  "auth.login.title": "Login",
+  "auth.login.email": "البريد الإلكتروني",
+  "auth.login.password": "كلمة المرور",
+  "auth.login.remember": "تذكرني",
+  "auth.login.forgot": "نسيت كلمة المرور؟",
+  "auth.login.submit": "تسجيل الدخول",
+  "auth.login.no_account_title": "ليس لديك حساب؟",
+  "auth.login.create_account": "أنشئ حسابًا",
+  "auth.login.hero_line1": "مرحبًا بك! ليس لديك حساب؟",
+  "auth.login.hero_line2": "انضم إلى منصتنا الأولى في الوطن العربي",
+
+  "auth.register.title": "إنشاء حساب",
+  "auth.register.name": "الاسم الكامل",
+  "auth.register.email": "البريد الإلكتروني",
+  "auth.register.password": "كلمة المرور",
+  "auth.register.password_confirm": "تأكيد كلمة المرور",
+  "auth.register.level_fresh": "حديث التخرج",
+  "auth.register.level_mid": "متوسط الخبرة",
+  "auth.register.level_consultant": "استشاري",
+  "auth.register.have_account_title": "هل لديك حساب؟",
+  "auth.register.sign_in": "تسجيل الدخول",
+  "auth.register.agree_prefix": "أوافق على",
+  "auth.register.terms": "الشروط",
+  "auth.register.submit": "إنشاء حساب",
+  "auth.register.hero_line1": "مرحبًا بك! نسعد بانضمامك",
+  "auth.register.hero_line2": "إلى منصتنا الأولى في الوطن العربي"
+  ,
+  "navbar.login": "Login",
+  "navbar.register": "Register"
+}
