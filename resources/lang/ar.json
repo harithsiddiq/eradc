@@ -1,0 +1,15 @@
+{
+  "posts.index.title": "جميع المقالات",
+  "posts.index.subtitle": "استكشف أحدث المقالات والنصائح في إدارة المشاريع والشهادات المهنية",
+  "settings.navigation": "الإعدادات",
+  "settings.footer.title": "الإعدادات",
+  "navbar.home": "الرئيسية",
+  "navbar.vision": "الرؤية والرسالة",
+  "navbar.trainer": "المدربين",
+  "navbar.curses": "الدورات التدريبية",
+  "navbar.infra-projects": "مشاريع البنى التحتية",
+  "navbar.posts": "المقالات",
+  "navbar.contact": "تواصل معنا",
+  "navbar.login": "تسجيل الدخول",
+  "navbar.register": "إنشاء حساب"
+}

@@ -28,6 +28,7 @@ class ContentPage extends Page implements Forms\Contracts\HasForms
     protected static ?string $title = 'المحتوى';
     protected static ?string $slug = 'content';
     protected static string $view = 'filament.pages.content-page';
+    protected static bool $shouldRegisterNavigation = false;
 
     public ?array $data = [];
 

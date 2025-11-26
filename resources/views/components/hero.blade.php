@@ -22,8 +22,8 @@
           <a href="#contact" class="inline-flex items-center px-5 py-3 rounded-xl border border-slate-300 text-gray-900 font-semibold hover:bg-slate-50">احصل على استشارة مجانية</a>
         </div>
         <div class="mt-8 flex items-center justify-center gap-6 text-sm text-gray-600 hero-metrics" style="justify-content:center;">
-          <div class="flex items-center gap-2"><img src="./assets/up.svg" alt="up" width="25">37 مشروع <br /> محلي معتمد</div>
-          <div class="flex items-center gap-2"><img src="./assets/up.svg" alt="up" width="25">93% نسبة <br /> فرص المتدربين</div>
+          <div class="flex items-center gap-2"><img src="./assets/up.svg" alt="up" width="25">{{ optional($post->meta->firstWhere('meta_key', 'مشروع محلي معتمد'))->getTranslation('meta_value', app()->getLocale()) }} مشروع <br /> محلي معتمد</div>
+          <div class="flex items-center gap-2"><img src="./assets/up.svg" alt="up" width="25">{{ optional($post->meta->firstWhere('meta_key', ' نسبة فرص المتدربين'))->getTranslation('meta_value', app()->getLocale()) }} نسبة <br /> فرص المتدربين</div>
         </div>
       </div>
       <div class="relative">

@@ -8,7 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Models\Post;
 
 Route::middleware(TrackVisits::class)->group(function () {
-    Route::get('/', [HomeController::class, 'index']);
+    Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/lang/{locale}', function (string $locale) {
         if (in_array($locale, ['ar', 'en'])) {
             session(['locale' => $locale]);
@@ -26,8 +26,27 @@ Route::middleware(TrackVisits::class)->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
     Route::get('/test', function () {
-        $posts = Post::first();
+        return $post = Post::with('meta')->first();
     });
+
+    Route::get('/posts', function () {
+        $posts = Post::with(['author', 'category'])
+            ->whereHas('category', function ($q) {
+                $q->whereNull('layout_style')->orWhere('layout_style', null);
+            })
+            ->latest('created_at')
+            ->paginate(12);
+        return view('pages.posts', compact('posts'));
+    })->name('posts.index');
+
+    Route::get('/post/{slug}', function (string $slug) {
+     $post = Post::with(['author', 'category', 'meta'])->where('slug', $slug)->firstOrFail();
+        return view('pages.post', compact('post'));
+    })->name('posts.show');
+
+    Route::get('/curses', function () {
+        return view('pages.curses');
+    })->name('curses');
 });
 
 Route::middleware('auth')->group(function () {

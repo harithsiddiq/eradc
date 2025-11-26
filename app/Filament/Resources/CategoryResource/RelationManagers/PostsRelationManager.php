@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
 use App\Models\Media;
+use App\Filament\Resources\PostResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
@@ -66,7 +67,14 @@ class PostsRelationManager extends RelationManager
                                 ->nullable(),
                         ])->columns(2),
                     Step::make('المحتوى')
-                        ->schema([]),
+                        ->schema([
+                            RichEditor::make('content')
+                                ->label('المحتوى')
+                                ->columnSpanFull(),
+                            RichEditor::make('excerpt')
+                                ->label('الملخص')
+                                ->columnSpanFull(),
+                        ]),
                     Step::make('الوسائط')
                         ->schema([
                             FileUpload::make('featured_image_path')
@@ -89,8 +97,9 @@ class PostsRelationManager extends RelationManager
                                 ->visibility('public')
                                 ->getUploadedFileNameForStorageUsing(fn ($file) => (string) \Illuminate\Support\Str::uuid() . '.' . $file->getClientOriginalExtension())
                                 ->default(function ($record) {
-                                    if (!$record || !is_array($record->additional_images)) return [];
-                                    return \App\Models\Media::whereIn('id', $record->additional_images)->pluck('file_path')->toArray();
+                                    if (!$record || !is_array($record->additional_images))
+                                        return [];
+                                    return Media::whereIn('id', $record->additional_images)->pluck('file_path')->toArray();
                                 })
                                 ->columnSpanFull(),
                         ])->columns(2),
@@ -141,63 +150,20 @@ class PostsRelationManager extends RelationManager
                     ->sortable(),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->mutateFormDataUsing(function (array $data): array {
-                        // Map gallery to additional_images
-                        $gallery = $data['gallery'] ?? [];
-                        if (is_string($gallery)) { $gallery = [$gallery]; }
-                        if (is_array($gallery) && count($gallery)) {
-                            $ids = [];
-                            foreach ($gallery as $path) {
-                                $ids[] = $this->findOrCreateMediaIdByPath($this->normalizePublicPath($path));
-                            }
-                            $data['additional_images'] = $ids;
-                        }
-                        unset($data['gallery']);
-                        return $data;
-                    })
-                    ->after(function ($record, array $data) {
-                        $items = $data['meta_items'] ?? [];
-                        $locale = app()->getLocale();
-                        foreach ($items as $item) {
-                            $key = $item['meta_key'] ?? null;
-                            $value = $item['meta_value'] ?? null;
-                            if (!filled($key)) continue;
-                            $meta = PostMeta::firstOrNew(['post_id' => $record->getKey(), 'meta_key' => $key]);
-                            $meta->setTranslation('meta_value', $locale, $value ?? '');
-                            $meta->save();
-                        }
+                Tables\Actions\Action::make('create')
+                    ->label('إنشاء')
+                    ->icon('heroicon-o-plus')
+                    ->url(function (): string {
+                        $categoryId = $this->getOwnerRecord()->getKey();
+                        $base = PostResource::getUrl('create');
+                        return $categoryId ? ($base . '?category_id=' . $categoryId) : $base;
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->mutateFormDataUsing(function (array $data): array {
-                        // Map gallery to additional_images on edit
-                        $gallery = $data['gallery'] ?? [];
-                        if (is_string($gallery)) { $gallery = [$gallery]; }
-                        $ids = [];
-                        if (is_array($gallery)) {
-                            foreach ($gallery as $path) {
-                                $ids[] = $this->findOrCreateMediaIdByPath($this->normalizePublicPath($path));
-                            }
-                        }
-                        $data['additional_images'] = $ids;
-                        unset($data['gallery']);
-                        return $data;
-                    })
-                    ->after(function ($record, array $data) {
-                        $items = $data['meta_items'] ?? [];
-                        $locale = app()->getLocale();
-                        $existing = PostMeta::where('post_id', $record->getKey())->get()->keyBy('meta_key');
-                        foreach ($items as $item) {
-                            $key = $item['meta_key'] ?? null;
-                            $value = $item['meta_value'] ?? null;
-                            if (!filled($key)) continue;
-                            $meta = $existing[$key] ?? new PostMeta(['post_id' => $record->getKey(), 'meta_key' => $key]);
-                            $meta->setTranslation('meta_value', $locale, $value ?? '');
-                            $meta->save();
-                        }
-                    }),
+                Tables\Actions\Action::make('edit')
+                    ->label('تحرير')
+                    ->icon('heroicon-o-pencil-square')
+                    ->url(fn ($record) => PostResource::getUrl('edit', ['record' => $record])),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

@@ -1,0 +1,15 @@
+{
+  "posts.index.title": "All Articles",
+  "posts.index.subtitle": "Explore the latest articles and tips on project management and professional certifications",
+  "settings.navigation": "Settings",
+  "settings.footer.title": "Settings",
+  "navbar.home": "Home",
+  "navbar.vision": "Vision & Mission",
+  "navbar.trainer": "Trainers",
+  "navbar.curses": "Courses",
+  "navbar.infra-projects": "Infrastructure Projects",
+  "navbar.posts": "Articles",
+  "navbar.contact": "Contact",
+  "navbar.login": "Login",
+  "navbar.register": "Register"
+}

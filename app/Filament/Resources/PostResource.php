@@ -69,7 +69,14 @@ class PostResource extends Resource
                                 ->searchable(),
                         ])->columns(2),
                     Step::make('المحتوى')
-                        ->schema([]),
+                        ->schema([
+                            RichEditor::make('content')
+                                ->label('المحتوى')
+                                ->columnSpanFull(),
+                            RichEditor::make('excerpt')
+                                ->label('الملخص')
+                                ->columnSpanFull(),
+                        ]),
                     Step::make('الوسائط')
                         ->schema([
                             FileUpload::make('featured_image_path')

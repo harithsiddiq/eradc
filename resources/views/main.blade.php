@@ -18,6 +18,7 @@
                     'strategic-partner' => 'logo-marquee-partner',
                     'contact-us' => 'contact',
                     'certificates' => 'levels',
+                    'posts' => 'blog'
                 ][$base] ?? $base
             )
             @php(
@@ -32,15 +33,5 @@
             ])
         @endif
     @endforeach
-    {{-- <x-hero />
-    <x-vision />
-    <x-logo-marquee />
-    <x-trainers />
-    <x-logo-marquee-standards />
-    <x-services />
-    <x-projects />
-    <x-infra-projects />
-    <x-contact /> --}}
-
 
 </x-layout.app>

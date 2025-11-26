@@ -7,13 +7,13 @@
 
       </a>
       <nav class="hidden md:flex items-center gap-8 text-sm">
-        <a href="#home" class="hover:text-cyan-accent">الرئيسية</a>
-        <a href="#vision" class="hover:text-cyan-accent">الرؤية والرسالة</a>
-        <a href="#trainer" class="hover:text-cyan-accent">المدربين</a>
-        <a href="/course.html" class="hover:text-cyan-accent">الدورات التدريبية</a>
-        <a href="#infra-projects" class="hover:text-cyan-accent">مشاريع البنى التحتية</a>
-        <a href="/post.html" class="hover:text-cyan-accent">المقالات</a>
-        <a href="#contact" class="hover:text-cyan-accent">تواصل معنا</a>
+        <a href="{{ route('home') }}" class="hover:text-cyan-accent">{{ __('navbar.home') }}</a>
+        <a href="{{ route('home') }}/#vision" class="hover:text-cyan-accent">{{ __('navbar.vision') }}</a>
+        <a href="{{ route('home') }}/#trainer" class="hover:text-cyan-accent">{{ __('navbar.trainer') }}</a>
+        <a href="{{ route('curses') }}" class="hover:text-cyan-accent">{{ __('navbar.curses') }}</a>
+        <a href="{{ route('home') }}/#infra-projects" class="hover:text-cyan-accent">{{ __('navbar.infra-projects') }}</a>
+        <a href="{{ route('posts.index') }}" class="hover:text-cyan-accent">{{ __('navbar.posts') }}</a>
+        <a href="{{ route('home') }}/#contact" class="hover:text-cyan-accent">{{ __('navbar.contact') }}</a>
       </nav>
       <div class="flex items-center gap-3">
         <div class="hidden sm:inline-flex items-center rounded-lg border border-slate-200 overflow-hidden">
@@ -71,7 +71,7 @@
             </svg>
         </div>
         </a>
-        <a href="course.html">
+        <a href="{{ route('curses') }}">
         <div class="flex items-center justify-between">
             <span>الدورات التدريبية</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -87,7 +87,7 @@
             </svg>
         </div>
         </a>
-        <a href="post.html">
+        <a href="{{ route('posts.index') }}">
         <div class="flex items-center justify-between">
             <span>المقالات</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">

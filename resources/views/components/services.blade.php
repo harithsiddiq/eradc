@@ -20,9 +20,9 @@
           </summary>
           <div class="content">
             <ul class="mt-3 space-y-2">
-                {!! str($singlePost->content)->markdown()->sanitizeHtml() !!}
+                {!! str($singlePost->excerpt)->markdown()->sanitizeHtml() !!}
             </ul>
-            <a href="#" class="action-btn"><span>تعرف أكثر</span><i class="fi fi-rr-arrow-left" style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
+            <a href="{{ route('posts.show', $singlePost->slug) }}" class="action-btn"><span>تعرف أكثر</span><i class="fi fi-rr-arrow-left" style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
           </div>
         </details>
         @empty
