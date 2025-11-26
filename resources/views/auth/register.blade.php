@@ -4,6 +4,11 @@
 
         <div class="lg:col-span-1">
           <div class="rounded-2xl p-6 ">
+            <div class="flex items-center justify-end gap-2 text-sm text-slate-600">
+              <a href="{{ route('lang.switch', 'ar') }}" class="hover:text-primary-blue {{ app()->getLocale()==='ar' ? 'font-semibold text-primary-blue' : '' }}">العربية</a>
+              <span class="text-slate-400">/</span>
+              <a href="{{ route('lang.switch', 'en') }}" class="hover:text-primary-blue {{ app()->getLocale()==='en' ? 'font-semibold text-primary-blue' : '' }}">English</a>
+            </div>
             <h2 class="text-xl font-bold">{{ __('auth.register.title') }}</h2>
             <form class="mt-4 space-y-4" action="{{ route('register') }}" method="POST">
               @csrf
