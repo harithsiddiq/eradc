@@ -29,6 +29,7 @@
             </div>
           </div>
         </div>
+        @if(($showMore ?? true))
         <div class="mt-4 justify-center flex">
           <span class="inline-flex items-center justify-center gap-3 text-blue-600 font-semibold">
             <span>عرض المزيد</span>
@@ -37,6 +38,7 @@
             </a>
           </span>
         </div>
+        @endif
       </div>
     @endforeach
 

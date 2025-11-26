@@ -3,7 +3,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <a href="/" class="flex items-center gap-2">
-          <img src="./assets/logo.svg" alt="" width="100" class="block mx-auto lg:mx-0">
+          <img src="{{ asset('assets/logo.svg') }}" alt="" width="100" class="block mx-auto lg:mx-0">
 
       </a>
       <nav class="hidden md:flex items-center gap-8 text-sm">

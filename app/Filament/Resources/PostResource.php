@@ -18,6 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput as FormsTextInput;
+use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Str;
 use Filament\Resources\Concerns\Translatable;
 use App\Models\Media;
@@ -76,6 +77,16 @@ class PostResource extends Resource
                             RichEditor::make('excerpt')
                                 ->label('الملخص')
                                 ->columnSpanFull(),
+                        ]),
+                    Step::make('محركات البحث')
+                        ->schema([
+                            TextInput::make('meta_title')
+                                ->label('عنوان الميتا')
+                                ->maxLength(255),
+                            Textarea::make('meta_description')
+                                ->label('وصف الميتا')
+                                ->rows(3)
+                                ->maxLength(500),
                         ]),
                     Step::make('الوسائط')
                         ->schema([

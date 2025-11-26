@@ -11,5 +11,9 @@
   "navbar.posts": "Articles",
   "navbar.contact": "Contact",
   "navbar.login": "Login",
-  "navbar.register": "Register"
+  "navbar.register": "Register",
+  "courses.price_note": "Inclusive of training & materials",
+  "courses.enroll_now": "Enroll Now",
+  "courses.need_guidance": "Need guidance?",
+  "courses.talk_to_advisor": "Talk to an advisor"
 }

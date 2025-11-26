@@ -1,6 +1,5 @@
 <!-- Services -->
 @if ($posts->count())
-{{-- @dd($posts) --}}
 <section id="services" class="py-12 sm:py-16 bg-slate-0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-right max-w-6xl ml-auto">
@@ -10,6 +9,7 @@
       </p>
       <div class="services-accordion mt-8 space-y-3">
         @forelse($posts as $singlePost)
+
         <details>
           <summary>
             <div class="flex items-center gap-3 justify-end">
@@ -22,7 +22,9 @@
             <ul class="mt-3 space-y-2">
                 {!! str($singlePost->excerpt)->markdown()->sanitizeHtml() !!}
             </ul>
-            <a href="{{ route('posts.show', $singlePost->slug) }}" class="action-btn"><span>تعرف أكثر</span><i class="fi fi-rr-arrow-left" style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
+            @if(($showMore ?? true))
+            <a href="{{ route('curses') }}" class="action-btn"><span>تعرف أكثر</span><i class="fi fi-rr-arrow-left" style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
+            @endif
           </div>
         </details>
         @empty

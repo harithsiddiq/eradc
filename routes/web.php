@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ExportController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Models\Post;
+use App\Models\Category;
 
 Route::middleware(TrackVisits::class)->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -47,6 +48,12 @@ Route::middleware(TrackVisits::class)->group(function () {
     Route::get('/curses', function () {
         return view('pages.curses');
     })->name('curses');
+
+    Route::get('/curse/{slug}', function (string $slug) {
+        $post = Post::with(['author', 'category', 'meta'])->where('slug', $slug)->firstOrFail();
+        $category = $post->category ? Category::with(['posts', 'children.posts'])->find($post->category_id) : null;
+        return view('pages.curses', compact('post', 'category'));
+    })->name('curse');
 });
 
 Route::middleware('auth')->group(function () {

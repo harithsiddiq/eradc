@@ -17,6 +17,8 @@ class Post extends Model
         'slug',
         'content',
         'excerpt',
+        'meta_title',
+        'meta_description',
         'status',
         'author_id',
         'featured_image_path',
@@ -29,6 +31,8 @@ class Post extends Model
         'title',
         'content',
         'excerpt',
+        'meta_title',
+        'meta_description',
     ];
 
     protected function casts(): array
