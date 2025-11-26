@@ -93,7 +93,7 @@
            </div>
         </div>
       </div>
-      </section>
+    </section>
 
   </main>
 </x-layout.app>

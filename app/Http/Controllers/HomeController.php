@@ -10,7 +10,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $posts = Category::with('posts')->get();
+        $posts = Category::with('posts')
+            ->whereNull('parent_id')
+            ->get();
 
         return view('main', ['posts' => $posts]);
     }

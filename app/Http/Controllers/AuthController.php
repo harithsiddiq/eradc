@@ -73,9 +73,11 @@ class AuthController extends Controller
             'signup_city' => $city,
         ]);
 
+        event(new \Illuminate\Auth\Events\Registered($user));
+
         Auth::login($user);
 
-        return redirect('/');
+        return redirect()->route('verification.notice');
     }
 
     public function logout(Request $request)

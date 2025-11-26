@@ -7,6 +7,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Models\Post;
 use App\Models\Category;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 Route::middleware(TrackVisits::class)->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -57,5 +59,19 @@ Route::middleware(TrackVisits::class)->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/export-data', [ExportController::class, 'export'])->name('admin.export');
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect()->intended('/');
+    })->middleware(['signed'])->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('status', 'verification-link-sent');
+    })->middleware(['throttle:6,1'])->name('verification.send');
+
+    Route::get('/admin/export-data', [ExportController::class, 'export'])->middleware('verified')->name('admin.export');
 });
