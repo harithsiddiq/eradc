@@ -10,7 +10,7 @@
         <a href="{{ route('home') }}" class="hover:text-cyan-accent">{{ __('navbar.home') }}</a>
         <a href="{{ route('home') }}/#vision" class="hover:text-cyan-accent">{{ __('navbar.vision') }}</a>
         <a href="{{ route('home') }}/#trainer" class="hover:text-cyan-accent">{{ __('navbar.trainer') }}</a>
-        <a href="{{ route('curses') }}" class="hover:text-cyan-accent">{{ __('navbar.curses') }}</a>
+        <a href="{{ route('home') }}/#services" class="hover:text-cyan-accent">{{ __('navbar.curses') }}</a>
         <a href="{{ route('home') }}/#infra-projects" class="hover:text-cyan-accent">{{ __('navbar.infra-projects') }}</a>
         <a href="{{ route('posts.index') }}" class="hover:text-cyan-accent">{{ __('navbar.posts') }}</a>
         <a href="{{ route('home') }}/#contact" class="hover:text-cyan-accent">{{ __('navbar.contact') }}</a>

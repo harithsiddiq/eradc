@@ -6,7 +6,7 @@
       <p class="mt-2 text-gray-600 text-sm">{{ __('posts.index.subtitle') }}</p>
     </div>
 
-    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" lang="ar">
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  style="min-height: 40vh">
       @forelse($posts as $p)
         @php($title = $p->getTranslation('title', app()->getLocale(), false) ?? $p->title)
         @php($excerpt = $p->getTranslation('excerpt', app()->getLocale(), false))
@@ -31,7 +31,7 @@
       @endforelse
     </div>
 
-    <div class="mt-10 flex items-center justify-between">
+    <div class=" flex items-center justify-between mt-4">
       <a href="{{ route('home') }}#home" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm">
         <i class="fi fi-rr-arrow-right"></i>
         <span>{{ app()->getLocale()==='ar' ? 'العودة للرئيسية' : 'Back to Home' }}</span>
