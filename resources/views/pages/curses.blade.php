@@ -59,7 +59,7 @@
     </section>
 
 
-    <section id="projects" class="py-12 sm:py-16 text-center">
+    <section id="projects" class="py-12 sm:py-16 hidden text-center">
        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
          <div class="text-right max-w-6xl ml-auto">
            <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">تقيمات المشتركين </h3>
