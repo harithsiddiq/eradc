@@ -23,7 +23,7 @@
                 {!! str($singlePost->excerpt)->markdown()->sanitizeHtml() !!}
             </ul>
             @if(($showMore ?? true))
-            <a href="{{ route('curses') }}" class="action-btn"><span>تعرف أكثر</span><i class="fi fi-rr-arrow-left" style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
+            <a href="{{ route('curse', $singlePost->slug) }}" class="action-btn"><span>تعرف أكثر</span><i class="fi fi-rr-arrow-left" style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
             @endif
           </div>
         </details>
