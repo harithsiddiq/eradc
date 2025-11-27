@@ -22,7 +22,7 @@
                         {!! $post->title !!}
                     </span>
                   </div>
-                  <a href="#" aria-label="عرض المزيد" style="width: 44px; height: 44px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); backdrop-filter: blur(2px); align-self: end;">
+                  <a href="{{ route('post.show', $post->slug) }}" aria-label="عرض المزيد" style="width: 44px; height: 44px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); backdrop-filter: blur(2px); align-self: end;">
                     <i class="fi fi-rr-arrow-left" style="color:#fff; font-size:20px; margin-top:5px;"></i>
                   </a>
                 </div>
