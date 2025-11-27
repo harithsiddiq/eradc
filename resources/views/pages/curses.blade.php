@@ -8,15 +8,18 @@
           <div class="lg:col-span-2">
             <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">{{ $post->title }}</h1>
             <p class="mt-3 text-gray-600">{!!  $post->excerpt !!}</p>
-            <div class="mt-4 flex items-center gap-4 text-sm text-gray-600">
+            <div class="mt-4 flex items-center gap-4 hidden text-sm text-gray-600">
               <span class="inline-flex items-center gap-2"><i class="fi fi-rr-check"></i>35 Contact Hours</span>
               <span class="inline-flex items-center gap-2"><i class="fi fi-rr-book-alt"></i>Exam Prep Kit</span>
               <span class="inline-flex items-center gap-2"><i class="fi fi-rr-calendar"></i>Weekend Batches</span>
             </div>
           </div>
           <aside class="rounded-2xl bg-white p-6 border border-slate-200 shadow">
-            @php($priceMeta = $post->meta->firstWhere('meta_key', 'price'))
-            @php($price = $priceMeta ? $priceMeta->getTranslation('meta_value', app()->getLocale(), false) : null)
+            @php($parentCategory = optional($post->category)->parent)
+            @php($parentPost = $parentCategory ? $parentCategory->posts()->first() : null)
+            @php($parentPriceMeta = $parentPost ? $parentPost->meta->firstWhere('meta_key', 'price') : null)
+            @php($priceMeta = $parentPriceMeta ?: $post->meta->firstWhere('meta_key', 'price'))
+            @php($price = $priceMeta ? $priceMeta->meta_value : null)
             <div class="text-2xl font-extrabold">{{ $price ?? '$399' }}</div>
             <p class="text-xs text-gray-500">{{ __('courses.price_note') }}</p>
             <a href="{{ url('index.html#contact') }}" class="mt-3 inline-flex items-center justify-center w-full px-4 py-2 rounded-lg bg-primary-blue text-white font-semibold hover:opacity-90">{{ __('courses.enroll_now') }}</a>

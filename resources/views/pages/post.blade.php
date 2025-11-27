@@ -111,7 +111,7 @@
                   @endforeach
                 </div>
               @endif
-              <div class="rounded-xl mt-2 bg-primary-blue/10 p-4">
+              <div class="rounded-xl hidden mt-2 bg-primary-blue/10 p-4">
                 <h4 class="font-semibold text-primary-blue">Need guidance?</h4>
                 <p class="text-sm text-slate-600 mt-1">Book a free session with our advisors.</p>
                 <a class="inline-flex items-center mt-3 px-4 py-2 rounded-lg bg-primary-blue text-white" href="index-main.html#contact">Get Free Session</a>

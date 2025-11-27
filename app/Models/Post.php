@@ -25,6 +25,7 @@ class Post extends Model
         'category_id',
         'additional_images',
         'published_at',
+        'show_on_landing',
     ];
 
     public array $translatable = [
@@ -42,6 +43,7 @@ class Post extends Model
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'additional_images' => 'array',
+            'show_on_landing' => 'boolean',
         ];
     }
 

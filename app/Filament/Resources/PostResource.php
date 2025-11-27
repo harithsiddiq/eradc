@@ -15,6 +15,7 @@ use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput as FormsTextInput;
@@ -68,6 +69,9 @@ class PostResource extends Resource
                                 ->relationship('category', 'name')
                                 ->preload()
                                 ->searchable(),
+                            Toggle::make('show_on_landing')
+                                ->label('عرض في الصفحة الرئيسية')
+                                ->default(false),
                         ])->columns(2),
                     Step::make('المحتوى')
                         ->schema([
@@ -180,6 +184,8 @@ class PostResource extends Resource
                     ->label('عدد الصور')
                     ->getStateUsing(fn ($record) => is_array($record->additional_images) ? count($record->additional_images) : 0)
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\ToggleColumn::make('show_on_landing')
+                    ->label('في الصفحة الرئيسية'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
