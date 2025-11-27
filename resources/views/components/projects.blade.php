@@ -5,7 +5,7 @@
     <div class="text-right max-w-6xl ml-auto">
       <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->name }}</h3>
       <p class="mt-2 text-gray-600 text-sm">
-        {{ $category->description }}
+        {!! $category->description !!}
       </p>
 
       <div class="services-accordion mt-8 space-y-3">
