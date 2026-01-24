@@ -9,7 +9,6 @@
   "auth.login.create_account": "Create account",
   "auth.login.hero_line1": "Welcome! Don’t have an account?",
   "auth.login.hero_line2": "Join our leading platform in the Arab world",
-
   "auth.register.title": "Register",
   "auth.register.name": "Full name",
   "auth.register.email": "Email",
@@ -24,8 +23,12 @@
   "auth.register.terms": "terms",
   "auth.register.submit": "Create Account",
   "auth.register.hero_line1": "Welcome! We’re glad you’re joining",
-  "auth.register.hero_line2": "our leading platform in the Arab world"
-  ,
+  "auth.register.hero_line2": "our leading platform in the Arab world",
   "navbar.login": "Login",
-  "navbar.register": "Register"
+  "navbar.register": "Register",
+  "learn_more": "Learn More",
+  "hero.explore_courses": "Explore Courses",
+  "hero.free_consultation": "Get a free consultation",
+  "explore_courses": "Explore Courses",
+  "free_consultation": "Get a free consultation"
 }

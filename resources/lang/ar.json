@@ -15,5 +15,10 @@
   "courses.price_note": "يشمل التدريب والمواد",
   "courses.enroll_now": "سجّل الآن",
   "courses.need_guidance": "تحتاج مساعدة؟",
-  "courses.talk_to_advisor": "تحدث إلى مستشار"
+  "courses.talk_to_advisor": "تحدث إلى مستشار",
+    "learn_more": "تعرف أكثر",
+  "hero.explore_courses": "استكشف الدورات",
+  "hero.free_consultation": "احصل على استشارة مجانية",
+  "explore_courses": "استكشف الدورات",
+  "free_consultation": "احصل على استشارة مجانية"
 }

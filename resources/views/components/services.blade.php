@@ -1,37 +1,52 @@
 <!-- Services -->
 @if ($posts->count())
-<section id="services" class="py-12 sm:py-16 bg-slate-0">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-right max-w-6xl ml-auto">
-      <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->name }}</h3>
-      <p class="mt-2 text-gray-600 text-sm">
-        {!! str($category->description)->markdown()->sanitizeHtml() !!}
-      </p>
-      <div class="services-accordion mt-8 space-y-3">
-        @forelse($posts as $singlePost)
+  <section id="services" class="py-12 sm:py-16 bg-slate-0">
+    <style>
+      #services .content ol {
+        list-style-type: decimal !important;
+        list-style-position: inside !important;
+        padding-right: 0 !important;
+      }
 
-        <details>
-          <summary>
-            <div class="flex items-center gap-3 justify-end">
-              <span class="title">{{ $singlePost->title }}</span>
-            </div>
-            <i class="fi fi-rr-plus chevron-plus w-5 h-5" style="color:#fff;"></i>
-            <i class="fi fi-rr-minus chevron-minus w-5 h-5" style="color:#fff;"></i>
-          </summary>
-          <div class="content">
-            <ul class="mt-3 space-y-2">
-                {!! str($singlePost->excerpt)->markdown()->sanitizeHtml() !!}
-            </ul>
-            @if(($showMore ?? true))
-            <a href="{{ route('curse', $singlePost->slug) }}" class="action-btn"><span>تعرف أكثر</span><i class="fi fi-rr-arrow-left" style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
-            @endif
-          </div>
-        </details>
-        @empty
+      #services .content ul {
+        list-style-type: disc !important;
+        list-style-position: inside !important;
+        padding-right: 0 !important;
+      }
+    </style>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-right max-w-6xl ml-auto">
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->name }}</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          {!! str($category->description)->markdown()->sanitizeHtml() !!}
+        </p>
+        <div class="services-accordion mt-8 space-y-3">
+          @forelse($posts as $singlePost)
+
+            <details>
+              <summary>
+                <div class="flex items-center gap-3 justify-end">
+                  <span class="title">{{ $singlePost->title }}</span>
+                </div>
+                <i class="fi fi-rr-plus chevron-plus w-5 h-5" style="color:#fff;"></i>
+                <i class="fi fi-rr-minus chevron-minus w-5 h-5" style="color:#fff;"></i>
+              </summary>
+              <div class="content">
+                <div class="mt-3 space-y-2">
+                  {!! str($singlePost->excerpt)->markdown()->sanitizeHtml() !!}
+                </div>
+                @if(($showMore ?? true))
+                  <a href="{{ route('curse', $singlePost->slug) }}" class="action-btn"><span>{{ __('learn_more') }}</span><i
+                      class="fi fi-rr-arrow-left"
+                      style="margin-inline-start: 0.5rem; font-size: 16px; vertical-align: middle;"></i></a>
+                @endif
+              </div>
+            </details>
+          @empty
             nothing
-        @endforelse
+          @endforelse
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 @endif

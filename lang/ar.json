@@ -9,7 +9,6 @@
   "auth.login.create_account": "أنشئ حسابًا",
   "auth.login.hero_line1": "مرحبًا بك! ليس لديك حساب؟",
   "auth.login.hero_line2": "انضم إلى منصتنا الأولى في الوطن العربي",
-
   "auth.register.title": "إنشاء حساب",
   "auth.register.name": "الاسم الكامل",
   "auth.register.email": "البريد الإلكتروني",
@@ -24,8 +23,12 @@
   "auth.register.terms": "الشروط",
   "auth.register.submit": "إنشاء حساب",
   "auth.register.hero_line1": "مرحبًا بك! نسعد بانضمامك",
-  "auth.register.hero_line2": "إلى منصتنا الأولى في الوطن العربي"
-  ,
+  "auth.register.hero_line2": "إلى منصتنا الأولى في الوطن العربي",
   "navbar.login": "Login",
-  "navbar.register": "Register"
+  "navbar.register": "Register",
+  "learn_more": "تعرف أكثر",
+  "hero.explore_courses": "استكشف الدورات",
+  "hero.free_consultation": "احصل على استشارة مجانية",
+  "explore_courses": "استكشف الدورات",
+  "free_consultation": "احصل على استشارة مجانية"
 }

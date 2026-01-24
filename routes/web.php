@@ -32,6 +32,21 @@ Route::middleware(TrackVisits::class)->group(function () {
         return $post = Post::with('meta')->first();
     });
 
+    Route::get('/test-translation', function () {
+        return [
+            'current_locale' => app()->getLocale(),
+            'session_locale' => session('locale'),
+            'config_locale' => config('app.locale'),
+            'fallback_locale' => config('app.fallback_locale'),
+            'translation_explore_courses' => __('explore_courses'),
+            'translation_free_consultation' => __('free_consultation'),
+            'translation_learn_more' => __('learn_more'),
+            'lang_path' => lang_path(),
+            'ar_json_exists' => file_exists(lang_path('ar.json')),
+            'en_json_exists' => file_exists(lang_path('en.json')),
+        ];
+    });
+
     Route::get('/posts', function () {
         $posts = Post::with(['author', 'category'])
             ->whereHas('category', function ($q) {
