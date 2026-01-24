@@ -3,7 +3,7 @@
 <section id="{{ $category->slug }}" class="py-12 sm:py-16 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center">
-      <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->section_name }}</h3>
+      <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->name }}</h3>
       <p class="mt-2 text-gray-600 text-md">
         {!! str($category->description)->markdown()->sanitizeHtml() !!}
       </p>
