@@ -63,7 +63,14 @@ Route::middleware(TrackVisits::class)->group(function () {
     })->name('posts.show');
 
     Route::get('/curses', function () {
-        return view('pages.curses');
+        $category = Category::where('layout_style', 'curses')->with(['posts', 'children.posts'])->first();
+        $post = $category?->posts?->first();
+
+        if (! $post) {
+            abort(404, 'Course content unavailable.');
+        }
+
+        return view('pages.curses', compact('post', 'category'));
     })->name('curses');
 
     Route::get('/curse/{slug}', function (string $slug) {

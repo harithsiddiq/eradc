@@ -6,14 +6,11 @@ use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Resources\Concerns\Translatable;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\TextInput\Mask;
 use Filament\Tables\Columns\TextColumn;
 // use Filament\Tables\Columns\DragHandle;
 
@@ -22,11 +19,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Actions\Action;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {
@@ -76,8 +69,7 @@ class CategoryResource extends Resource
                     ->required()
                     ->unique(ignoreRecord: true),
                 TextInput::make('link')
-                    ->label('وصف')
-                    ->url()
+                    ->label('اسم القسم في menu')
                     ->nullable(),
                 Toggle::make('show_in_menu')
                     ->label('إظهار في القائمة')

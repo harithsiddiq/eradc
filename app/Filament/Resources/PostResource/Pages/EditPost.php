@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Log;
 
 class EditPost extends EditRecord
 {
-    use EditTranslatable;
+    use EditTranslatable {
+        EditTranslatable::updatedActiveLocale as traitUpdatedActiveLocale;
+    }
     protected static string $resource = PostResource::class;
 
     protected function getHeaderActions(): array
@@ -22,6 +24,19 @@ class EditPost extends EditRecord
             Actions\LocaleSwitcher::make(),
             Actions\DeleteAction::make(),
         ];
+    }
+
+    public function updatedActiveLocale(): void
+    {
+        $this->traitUpdatedActiveLocale();
+
+        $locale = $this->activeLocale;
+        $this->data['meta_items'] = $this->record->meta()->get()->map(function ($m) use ($locale) {
+            return [
+                'meta_key' => $m->getTranslation('meta_key', $locale, false) ?? '',
+                'meta_value' => $m->getTranslation('meta_value', $locale, false) ?? '',
+            ];
+        })->toArray();
     }
 
     protected function mutateFormDataBeforeSave(array $data): array
@@ -52,22 +67,20 @@ class EditPost extends EditRecord
         // Save meta items
         $metaItems = $state['meta_items'] ?? [];
         if (is_array($metaItems)) {
-            $locale = app()->getLocale();
-            // Sync: update/create items present; remove ones not present
-            $keys = [];
-            foreach ($metaItems as $item) {
+            $locale = $this->activeLocale ?? app()->getLocale();
+            $existingMetas = $this->record->meta()->get();
+            foreach ($metaItems as $i => $item) {
                 $key = $item['meta_key'] ?? null;
                 $val = $item['meta_value'] ?? null;
                 if (!$key) continue;
-                $keys[] = $key;
-                $meta = $this->record->meta()->firstOrNew(['meta_key' => $key]);
+                $meta = $existingMetas->get($i) ?? $this->record->meta()->make();
                 $meta->post_id = $this->record->getKey();
-                $meta->setTranslation('meta_value', $locale, $val ?? '');
+                $meta->meta_key = Str::slug($item['meta_key'], '_');
+                $meta->setTranslation('meta_value', $locale, $item['meta_value'] ?? null);
                 $meta->save();
             }
-            if (count($keys)) {
-                $this->record->meta()->whereNotIn('meta_key', $keys)->delete();
-            }
+            // Remove extra metas beyond what's in the repeater
+            $existingMetas->slice(count($metaItems))->each->delete();
         }
     }
 
@@ -80,10 +93,10 @@ class EditPost extends EditRecord
             $data['gallery'] = [];
         }
         // Pre-fill meta repeater
-        $locale = app()->getLocale();
+        $locale = $this->activeLocale ?? app()->getLocale();
         $data['meta_items'] = $this->record->meta()->get()->map(function ($m) use ($locale) {
             return [
-                'meta_key' => $m->meta_key,
+                'meta_key' => $m->getTranslation('meta_key', $locale, false) ?? '',
                 'meta_value' => $m->getTranslation('meta_value', $locale, false) ?? '',
             ];
         })->toArray();

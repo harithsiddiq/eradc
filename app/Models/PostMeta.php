@@ -19,6 +19,7 @@ class PostMeta extends Model
     ];
 
     public array $translatable = [
+        'meta_key',
         'meta_value',
     ];
 

@@ -26,6 +26,7 @@ class Category extends Model
         'name',
         'description',
         'section_name',
+        'link',
     ];
 
     protected function casts(): array

@@ -1,6 +1,6 @@
 <!-- Our Vision -->
 @if (isset($post) && isset($category))
-<section id="{{ $category->slug }}" class="py-12 sm:py-16 bg-white">
+<section id="makemission-vision" class="py-12 sm:py-16 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center">
       <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->name }}</h3>

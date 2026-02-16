@@ -62,13 +62,14 @@ class CreatePost extends CreateRecord
         // Save meta items
         $metaItems = $state['meta_items'] ?? [];
         if (is_array($metaItems)) {
-            $locale = app()->getLocale();
+            $locale = $this->activeLocale ?? app()->getLocale();
             foreach ($metaItems as $item) {
                 $key = $item['meta_key'] ?? null;
                 $val = $item['meta_value'] ?? null;
                 if (!$key) continue;
-                $meta = $this->record->meta()->firstOrNew(['meta_key' => $key]);
+                $meta = $this->record->meta()->make();
                 $meta->post_id = $this->record->getKey();
+                $meta->setTranslation('meta_key', $locale, $key);
                 $meta->setTranslation('meta_value', $locale, $val ?? '');
                 $meta->save();
             }
@@ -109,8 +110,3 @@ class CreatePost extends CreateRecord
         return $path;
     }
 }
-        // Persist meta repeater
-        $metaItems = $data['meta_items'] ?? [];
-        if (is_array($metaItems)) {
-            $data['meta_items'] = array_values(array_filter($metaItems, fn($m) => !empty($m['meta_key'])));
-        }

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\PostMeta;
 use App\Models\Media;
+use Database\Seeders\MenuSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -102,5 +103,7 @@ class DatabaseSeeder extends Seeder
                 $meta->save();
             }
         }
+
+        $this->call(MenuSeeder::class);
     }
 }

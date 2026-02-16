@@ -5,42 +5,48 @@
       <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-6">{{ $category->name }}</h3>
     </div>
     <div class="py-16 grid sm:grid-cols-2 gap-8">
-    @foreach ($posts as $singlePost)
+      @foreach ($posts as $singlePost)
       <div class="flex flex-col items-center p-8 gap-4 text-slate-500 bg-white rounded-2xl">
-        <img class="rounded-full" src="{{ $singlePost->featured_image_path ? Storage::disk('public')->url($singlePost->featured_image_path) : '' }}" alt="trainer1" style="width: 170px; height: 170px; object-fit: cover;"/>
+        <img class="rounded-full"
+          src="{{ $singlePost->featured_image_path ? Storage::disk('public')->url($singlePost->featured_image_path) : '' }}"
+          alt="trainer1" style="width: 170px; height: 170px; object-fit: cover;" />
         <span class="text-xl font-bold text-primary-blue">{{ $singlePost->title }}</span>
         <span class="text-md text-center text-gray-400 line-clamp-3">
-            {!! str($singlePost->excerpt)->markdown()->sanitizeHtml() !!}
+          {!! str($singlePost->excerpt)->markdown()->sanitizeHtml() !!}
         </span>
         <div class="mt-2"></div>
-        <div class="mt-2 w-50">
-          <div class="flex justify-between gap-8 text-primary-blue">
-            <div class="text-center">
-              <span class="block text-blue-600 bold">{{ optional($singlePost->meta->firstWhere('meta_key', 'expert'))->getTranslation('meta_value', app()->getLocale()) }}</span>
-              <span>سنوات الخبرة</span>
-            </div>
-            <div class="text-center">
-              <span class="block text-blue-600 font-bold">{{ optional($singlePost->meta->firstWhere('meta_key', 'projects'))->getTranslation('meta_value', app()->getLocale()) }}</span>
-              <span>المشاريع المكتملة</span>
-            </div>
-            <div class="text-center">
-              <span class="block text-blue-600 font-bold">{{ optional($singlePost->meta->firstWhere('meta_key', 'trainers'))->getTranslation('meta_value', app()->getLocale()) }}</span>
-              <span>متدرب</span>
+        @php($trainerMetrics = $singlePost->meta->map(function ($meta) {
+          $locale = app()->getLocale();
+          return [
+            'label' => $meta->getTranslation('meta_key', $locale, false) ?? '',
+            'value' => $meta->getTranslation('meta_value', $locale, false) ?? '',
+          ];
+        })->filter(fn($metric) => filled($metric['label']) || filled($metric['value'])))
+        @if($trainerMetrics->count())
+          <div class="mt-2 w-full">
+            <div class="flex flex-wrap justify-center gap-10 text-primary-blue">
+              @foreach($trainerMetrics as $metric)
+                <div class="text-center flex-1 min-w-[100px]">
+                  <span class="block text-blue-600 font-bold text-lg">{{ $metric['value'] }}</span>
+                  <span class="text-sm text-gray-600">{{ $metric['label'] }}</span>
+                </div>
+              @endforeach
             </div>
           </div>
-        </div>
+        @endif
         @if(($showMore ?? true))
-        <div class="mt-4 justify-center flex">
-          <span class="inline-flex items-center justify-center gap-3 text-blue-600 font-semibold">
-            <span>عرض المزيد</span>
-            <a href="{{ route('posts.show', $singlePost->slug) }}" aria-label="عرض المزيد" style="width: 44px; height: 44px; border-radius: 9999px; border: 1px solid #2e3192; display: inline-flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); align-self: end;">
-              <i class="fi fi-rr-arrow-left" style="color:#2e3192; font-size:20px; margin-top:5px;"></i>
-            </a>
-          </span>
-        </div>
+          <div class="mt-4 justify-center flex">
+            <span class="inline-flex items-center justify-center gap-3 text-blue-600 font-semibold">
+              <span>عرض المزيد</span>
+              <a href="{{ route('posts.show', $singlePost->slug) }}" aria-label="عرض المزيد"
+                style="width: 44px; height: 44px; border-radius: 9999px; border: 1px solid #2e3192; display: inline-flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); align-self: end;">
+                <i class="fi fi-rr-arrow-left" style="color:#2e3192; font-size:20px; margin-top:5px;"></i>
+              </a>
+            </span>
+          </div>
         @endif
       </div>
-    @endforeach
+      @endforeach
 
     </div>
   </div>

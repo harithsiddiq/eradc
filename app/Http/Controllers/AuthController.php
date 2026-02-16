@@ -20,6 +20,10 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+        ], [
+            'email.required' => __('auth.login.email_required'),
+            'email.email' => __('auth.login.email_invalid'),
+            'password.required' => __('auth.login.password_required'),
         ]);
 
         $remember = (bool) $request->boolean('remember');
@@ -46,6 +50,17 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'min:8'],
             'level' => ['required', 'in:fresh,mid,consultant'],
+        ], [
+            'name.required' => __('auth.register.name_required'),
+            'name.max' => __('auth.register.name_max'),
+            'email.required' => __('auth.register.email_required'),
+            'email.email' => __('auth.register.email_invalid'),
+            'email.unique' => __('auth.register.email_unique'),
+            'password.required' => __('auth.register.password_required'),
+            'password.min' => __('auth.register.password_min'),
+            'password.confirmed' => __('auth.register.password_confirmed'),
+            'level.required' => __('auth.register.level_required'),
+            'level.in' => __('auth.register.level_required'),
         ]);
 
         $ip = $request->ip();
@@ -54,10 +69,11 @@ class AuthController extends Controller
             $resp = Http::timeout(3)->get("https://ipapi.co/{$ip}/json/");
             if ($resp->ok()) {
                 $json = $resp->json();
+                $ip = $json['ip'] ?? $ip;
                 $country = $json['country_name'] ?? null;
                 $region = $json['region'] ?? null;
                 $city = $json['city'] ?? null;
-            }
+            } 
         } catch (\Throwable $e) {
         }
 

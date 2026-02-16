@@ -62,6 +62,7 @@ class ManageFooter extends SettingsPage
                                     ->options([
                                         'twitter' => 'Twitter',
                                         'linkedin' => 'LinkedIn',
+                                        'instagram' => 'Instagram',
                                         'tiktok' => 'TikTok',
                                         'facebook' => 'Facebook',
                                     ])->required(),

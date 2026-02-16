@@ -4,10 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -23,40 +23,36 @@ class UserResource extends Resource
         return 'المستخدمون';
     }
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
-        return $form
+        return $form->schema([]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
             ->schema([
-                TextInput::make('name')
-                    ->label('الاسم')
-                    ->required(),
-                TextInput::make('email')
-                    ->label('البريد الإلكتروني')
-                    ->email()
-                    ->required()
-                    ->unique(ignoreRecord: true),
-                TextInput::make('password')
-                    ->label('كلمة المرور')
-                    ->password()
-                    ->dehydrateStateUsing(fn ($state) => filled($state) ? $state : null)
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->required(fn ($operation) => $operation === 'create'),
-                Select::make('type')
-                    ->label('نوع المستخدم')
-                    ->options([
-                        'user' => 'مستخدم',
-                        'admin' => 'مشرف',
-                    ])
-                    ->default('user')
-                    ->required(),
-                Select::make('level')
-                    ->label('المستوى')
-                    ->options([
-                        'fresh' => 'حديث التخرج',
-                        'mid' => 'متوسط الخبرة',
-                        'consultant' => 'استشاري',
-                    ])
-                    ->nullable(),
+                Section::make('المعلومات الأساسية')
+                    ->schema([
+                        TextEntry::make('name')->label('الاسم'),
+                        TextEntry::make('email')->label('البريد الإلكتروني'),
+                        TextEntry::make('type')->label('نوع المستخدم')->badge(),
+                        TextEntry::make('level')->label('المستوى')->badge(),
+                    ])->columns(2),
+                Section::make('معلومات التسجيل')
+                    ->schema([
+                        TextEntry::make('signup_ip')->label('IP'),
+                        TextEntry::make('signup_country')->label('الدولة'),
+                        TextEntry::make('signup_region')->label('المنطقة'),
+                        TextEntry::make('signup_city')->label('المدينة'),
+                        TextEntry::make('email_verified_at')->label('تاريخ التحقق')->dateTime(),
+                        TextEntry::make('created_at')->label('تاريخ التسجيل')->dateTime(),
+                    ])->columns(3),
             ]);
     }
 
@@ -112,14 +108,9 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
@@ -131,8 +122,7 @@ class UserResource extends Resource
     {
         return [
             'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'view' => Pages\ViewUser::route('/{record}'),
         ];
     }
 }

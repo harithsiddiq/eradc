@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'failed' => 'The email or password is incorrect.',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'login' => [
         'title' => 'Login',
         'email' => 'Email',
@@ -10,8 +12,11 @@ return [
         'submit' => 'Sign in',
         'hero_line1' => 'Welcome back to',
         'hero_line2' => 'EradcHub',
-        'no_account_title' => "Don’t have an account?",
+        'no_account_title' => "Don't have an account?",
         'create_account' => 'Create an account',
+        'email_required' => 'Please enter your email address.',
+        'email_invalid' => 'Please enter a valid email address.',
+        'password_required' => 'Please enter your password.',
     ],
     'register' => [
         'title' => 'Register',
@@ -26,6 +31,16 @@ return [
         'hero_line2' => 'EradcHub',
         'have_account_title' => 'Already have an account?',
         'sign_in' => 'Sign in',
+        'name_required' => 'Please enter your full name.',
+        'name_max' => 'Name must not exceed 255 characters.',
+        'email_required' => 'Please enter your email address.',
+        'email_invalid' => 'Please enter a valid email address.',
+        'email_unique' => 'This email is already registered.',
+        'password_required' => 'Please enter a password.',
+        'password_min' => 'Password must be at least 8 characters.',
+        'password_confirmed' => 'Password confirmation does not match.',
+        'password_hint' => 'At least 8 characters',
+        'level_required' => 'Please select your professional level.',
+        'success' => 'Your account has been created successfully!',
     ],
 ];
-
