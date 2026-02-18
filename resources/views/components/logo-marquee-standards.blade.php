@@ -6,13 +6,18 @@
       <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->name }}</h3>
     </div>
     <div class="logo-swiper swiper">
-      <div class="swiper-wrapper flex justify-center">
+      <div class="swiper-wrapper flex justify-center items-center gap-4">
         @php($firstPost = $posts->first())
         @foreach (($firstPost?->additional_images ?? []) as $img)
-          @php($media = is_numeric($img) ? \App\Models\Media::find($img) : null)
-          @php($src = $media?->file_path ?? $img)
-          @php($url = $src ? Storage::disk('public')->url($src) : '')
-          <div class="swiper-slide"><img src="{{ $url }}" alt="{{ $media?->getTranslation('alt_text', app()->getLocale()) }}" /></div>
+        @php($media = is_numeric($img) ? \App\Models\Media::find($img) : null)
+        @php($src = $media?->file_path ?? $img)
+        @php($url = $src ? Storage::disk('public')->url($src) : '')
+        <div class="swiper-slide flex items-center justify-center">
+          <div class="flex items-center justify-center w-40 h-20">
+            <img src="{{ $url }}" alt="{{ $media?->getTranslation('alt_text', app()->getLocale()) }}"
+              class="max-h-full max-w-full object-contain" />
+          </div>
+        </div>
         @endforeach
       </div>
     </div>

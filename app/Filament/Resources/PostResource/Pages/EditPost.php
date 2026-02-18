@@ -75,7 +75,7 @@ class EditPost extends EditRecord
                 if (!$key) continue;
                 $meta = $existingMetas->get($i) ?? $this->record->meta()->make();
                 $meta->post_id = $this->record->getKey();
-                $meta->meta_key = Str::slug($item['meta_key'], '_');
+                $meta->setTranslation('meta_key', $locale, $item['meta_key']);
                 $meta->setTranslation('meta_value', $locale, $item['meta_value'] ?? null);
                 $meta->save();
             }
