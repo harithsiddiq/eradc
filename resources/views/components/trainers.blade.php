@@ -37,8 +37,8 @@
         @if(($showMore ?? true))
           <div class="mt-4 justify-center flex">
             <span class="inline-flex items-center justify-center gap-3 text-blue-600 font-semibold">
-              <span>عرض المزيد</span>
-              <a href="{{ route('posts.show', $singlePost->slug) }}" aria-label="عرض المزيد"
+              <span>{{ __('show_more') }}</span>
+              <a href="{{ route('posts.show', $singlePost->slug) }}" aria-label="{{ __('show_more') }}"
                 style="width: 44px; height: 44px; border-radius: 9999px; border: 1px solid #2e3192; display: inline-flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); align-self: end;">
                 <i class="fi fi-rr-arrow-left" style="color:#2e3192; font-size:20px; margin-top:5px;"></i>
               </a>
@@ -49,6 +49,23 @@
       @endforeach
 
     </div>
+
+    @php($allImageIds = $posts->pluck('additional_images')->flatten()->filter()->unique()->toArray())
+    @php($allMedia = count($allImageIds) ? \App\Models\Media::whereIn('id', $allImageIds)->get() : collect())
+    @if($allMedia->count())
+    <div class="mt-8 border-t border-white/10 pt-8 w-full">
+      <div class="flex flex-wrap items-center justify-center gap-6">
+        @foreach($allMedia as $media)
+        @php($imgPath = ltrim($media->file_path, '/'))
+        @php($imgPath = str_starts_with($imgPath, 'storage/') ? substr($imgPath, 8) : $imgPath)
+        <img src="{{ Storage::disk('public')->url($imgPath) }}"
+          alt="{{ $media->getTranslation('alt_text', app()->getLocale(), false) ?? '' }}"
+          class="object-contain filter brightness-0 invert opacity-80" style="height: 50px; max-width: 120px;"
+          loading="lazy" />
+        @endforeach
+      </div>
+    </div>
+    @endif
   </div>
 </section>
 @endif

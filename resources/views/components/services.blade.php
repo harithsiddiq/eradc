@@ -43,7 +43,7 @@
               </div>
             </details>
           @empty
-            nothing
+            {{ __('no_items') }}
           @endforelse
         </div>
       </div>

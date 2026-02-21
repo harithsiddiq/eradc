@@ -66,6 +66,30 @@
           <div class="prose prose-slate max-w-none">
             {!! str($post->content)->markdown()->sanitizeHtml() !!}
           </div>
+          @php($rawImages = collect(is_array($post->additional_images ?? null) ? $post->additional_images : [])->flatten()->filter()->values())
+          @php($mediaIds = $rawImages->filter(fn($item) => is_numeric($item))->map(fn($item) => (int) $item)->unique()->values()->toArray())
+          @php($mediaFromIds = count($mediaIds) ? \App\Models\Media::whereIn('id', $mediaIds)->get() : collect())
+          @php($stringPaths = $rawImages->filter(fn($item) => is_string($item) && !is_numeric($item))->unique()->values())
+          @php($mediaFromPaths = $stringPaths->count() ? \App\Models\Media::whereIn('file_path', $stringPaths)->orWhereIn('file_name', $stringPaths)->get() : collect())
+          @php($media = $mediaFromIds->concat($mediaFromPaths)->unique('id')->values())
+          @php($paths = $media->pluck('file_path')->merge($stringPaths)->filter()->unique()->values())
+          @if($paths->count())
+          <div class="mt-8 border-t border-slate-200 pt-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              @foreach($paths as $path)
+              @php($mediaItem = $media->firstWhere('file_path', $path) ?? $media->firstWhere('file_name', $path))
+              @php($galleryPath = ltrim($path, '/'))
+              @php($galleryPath = str_starts_with($galleryPath, 'storage/') ? substr($galleryPath, 8) : $galleryPath)
+              <a href="{{ asset('storage/' . $galleryPath) }}"
+                class="block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow">
+                <img src="{{ asset('storage/' . $galleryPath) }}"
+                  alt="{{ $mediaItem?->getTranslation('alt_text', app()->getLocale(), false) ?? $post->title }}"
+                  class="w-full h-56 object-cover" loading="lazy" />
+              </a>
+              @endforeach
+            </div>
+          </div>
+          @endif
           <!-- Prev/Next navigation -->
           <div class="mt-8 hidden items-center justify-between">
             <a href="#" class="inline-flex items-center gap-3">

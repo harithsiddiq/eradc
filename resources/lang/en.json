@@ -20,5 +20,18 @@
   "hero.explore_courses": "Explore Courses",
   "hero.free_consultation": "Get a free consultation",
   "explore_courses": "Explore Courses",
-  "free_consultation": "Get a free consultation"
+  "free_consultation": "Get a free consultation",
+  "show_more": "Show More",
+  "contact.name_label": "Name",
+  "contact.name_placeholder": "Your name",
+  "contact.email_label": "Email",
+  "contact.email_placeholder": "you@example.com",
+  "contact.message_label": "Message",
+  "contact.message_placeholder": "How can we help you?",
+  "contact.send_message": "Send Message",
+  "levels.title": "Levels",
+  "levels.day_intro": "Day One: Introduction",
+  "levels.description": "Specialized courses in electrical engineering covering the latest technologies and international standards in data centers and electrical systems",
+  "no_items": "No items found",
+  "partner": "Partner"
 }

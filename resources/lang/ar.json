@@ -20,5 +20,18 @@
   "hero.explore_courses": "استكشف الدورات",
   "hero.free_consultation": "احصل على استشارة مجانية",
   "explore_courses": "استكشف الدورات",
-  "free_consultation": "احصل على استشارة مجانية"
+  "free_consultation": "احصل على استشارة مجانية",
+  "show_more": "عرض المزيد",
+  "contact.name_label": "الاسم",
+  "contact.name_placeholder": "اسمك",
+  "contact.email_label": "البريد الإلكتروني",
+  "contact.email_placeholder": "you@example.com",
+  "contact.message_label": "الرسالة",
+  "contact.message_placeholder": "كيف يمكننا مساعدتك؟",
+  "contact.send_message": "إرسال الرسالة",
+  "levels.title": "المستويات",
+  "levels.day_intro": "اليوم الاول : التعريف",
+  "levels.description": "دورات متخصصة في الهندسة الكهربائية تغطي أحدث التقنيات والمعايير الدولية في مجال مراكز البيانات والأنظمة الكهربائية من التيار العالي والمنخفض",
+  "no_items": "لا توجد عناصر",
+  "partner": "شريك"
 }
