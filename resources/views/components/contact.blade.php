@@ -12,8 +12,9 @@
         </p>
         <div class="mt-6 space-y-3 text-sm text-gray-700">
           <div class="flex items-center gap-3 justify-end">
-            <span>{{ is_array($footer->brand_name) ? ($footer->brand_name[app()->getLocale()] ?? reset($footer->brand_name)) : $footer->brand_name }}</span><span
-              class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary-blue text-white font-bold">EH</span>
+            <span>{{ is_array($footer->brand_name) ? ($footer->brand_name[app()->getLocale()] ?? reset($footer->brand_name)) : $footer->brand_name }}</span>
+            {{-- <span
+              class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary-blue text-white font-bold">EH</span> --}}
           </div>
           <div class="flex items-center gap-3 justify-end"><a href="mailto:{{ $footer->contact_email }}"
               class="hover:text-cyan-accent">{{ $footer->contact_email }}</a><i

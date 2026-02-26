@@ -33,5 +33,7 @@
   "levels.day_intro": "Day One: Introduction",
   "levels.description": "Specialized courses in electrical engineering covering the latest technologies and international standards in data centers and electrical systems",
   "no_items": "No items found",
-  "partner": "Partner"
+  "partner": "Partner",
+  "courses.index_title": "Our Training Courses",
+  "courses.index_subtitle": "Browse our variety of specialized engineering courses"
 }

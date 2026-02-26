@@ -82,9 +82,39 @@ class PostResource extends Resource
                         ->schema([
                             RichEditor::make('content')
                                 ->label('المحتوى')
+                                ->toolbarButtons([
+                                    'attachFiles',
+                                    'blockquote',
+                                    'bold',
+                                    'bulletList',
+                                    'codeBlock',
+                                    'h1',
+                                    'h2',
+                                    'h3',
+                                    'italic',
+                                    'link',
+                                    'orderedList',
+                                    'redo',
+                                    'strike',
+                                    'undo',
+                                ])
                                 ->columnSpanFull(),
                             RichEditor::make('excerpt')
                                 ->label('الملخص')
+                                ->toolbarButtons([
+                                    'blockquote',
+                                    'bold',
+                                    'bulletList',
+                                    'h1',
+                                    'h2',
+                                    'h3',
+                                    'italic',
+                                    'link',
+                                    'orderedList',
+                                    'redo',
+                                    'strike',
+                                    'undo',
+                                ])
                                 ->columnSpanFull(),
                         ]),
                     Step::make('محركات البحث')

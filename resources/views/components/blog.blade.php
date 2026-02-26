@@ -12,8 +12,9 @@
           <div class="swiper mySwiper" style="height: 280px; width: 100% !important">
             <div class="swiper-wrapper">
               @foreach ($posts as $post)
-                <div class="swiper-slide">
-                  <div class="relative" style="height: 280px; border-radius: 16px; overflow: hidden; box-shadow: none;">
+                <div class="swiper-slide" style="height: 280px;">
+                  <div class="relative"
+                    style="height: 100%; width: 100%; border-radius: 16px; overflow: hidden; box-shadow: none;">
                     <img
                       src="{{ $post->featured_image_path ? Storage::disk('public')->url($post->featured_image_path) : '' }}"
                       alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;">

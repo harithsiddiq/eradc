@@ -63,20 +63,19 @@ Route::middleware(TrackVisits::class)->group(function () {
     })->name('posts.show');
 
     Route::get('/curses', function () {
-        $category = Category::where('layout_style', 'curses')->with(['posts', 'children.posts'])->first();
-        $post = $category?->posts?->first();
+        $category = Category::where('layout_style', 'training-services')->first();
+        $posts = Post::where('category_id', $category?->id)
+            ->orWhereIn('category_id', $category?->children->pluck('id') ?? [])
+            ->latest()
+            ->paginate(12);
 
-        if (! $post) {
-            abort(404, 'Course content unavailable.');
-        }
-
-        return view('pages.curses', compact('post', 'category'));
+        return view('pages.curses', compact('posts', 'category'));
     })->name('curses');
 
     Route::get('/curse/{slug}', function (string $slug) {
         $post = Post::with(['author', 'category', 'meta'])->where('slug', $slug)->firstOrFail();
         $category = $post->category ? Category::with(['posts', 'children.posts'])->find($post->category_id) : null;
-        return view('pages.curses', compact('post', 'category'));
+        return view('pages.curse', compact('post', 'category'));
     })->name('curse');
 });
 

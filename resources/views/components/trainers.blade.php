@@ -49,23 +49,6 @@
       @endforeach
 
     </div>
-
-    @php($allImageIds = $posts->pluck('additional_images')->flatten()->filter()->unique()->toArray())
-    @php($allMedia = count($allImageIds) ? \App\Models\Media::whereIn('id', $allImageIds)->get() : collect())
-    @if($allMedia->count())
-    <div class="mt-8 border-t border-white/10 pt-8 w-full">
-      <div class="flex flex-wrap items-center justify-center gap-6">
-        @foreach($allMedia as $media)
-        @php($imgPath = ltrim($media->file_path, '/'))
-        @php($imgPath = str_starts_with($imgPath, 'storage/') ? substr($imgPath, 8) : $imgPath)
-        <img src="{{ Storage::disk('public')->url($imgPath) }}"
-          alt="{{ $media->getTranslation('alt_text', app()->getLocale(), false) ?? '' }}"
-          class="object-contain filter brightness-0 invert opacity-80" style="height: 50px; max-width: 120px;"
-          loading="lazy" />
-        @endforeach
-      </div>
-    </div>
-    @endif
   </div>
 </section>
 @endif

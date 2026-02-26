@@ -5,9 +5,11 @@
     <div class="grid md:grid-cols-4 gap-8">
       <div class="md:col-span-1">
         <div class="flex items-center gap-2 mb-4 justify-start">
-          <img src="{{ asset('assets/logo-white.svg') }}" alt="" width="100" class="block mx-auto lg:mx-0">
-          {{-- <span class="font-bold text-xl">{{ is_array($footer->brand_name) ? ($footer->brand_name[app()->getLocale()] ?? reset($footer->brand_name)) : $footer->brand_name }}</span><span
-            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-brand-600 text-white font-bold text-lg">EH</span> --}}
+          <img src="{{ asset('assets/logo.svg') }}" alt="" width="100" class="block mx-auto lg:mx-0">
+          {{-- <span class="font-bold text-xl">{{ is_array($footer->brand_name) ?
+            ($footer->brand_name[app()->getLocale()] ?? reset($footer->brand_name)) : $footer->brand_name }}</span><span
+            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-brand-600 text-white font-bold text-lg">EH</span>
+          --}}
         </div>
         <p class="text-gray-400 text-sm leading-relaxed mb-4">
           {{ is_array($footer->about_text) ? ($footer->about_text[app()->getLocale()] ?? reset($footer->about_text)) : $footer->about_text }}
@@ -74,7 +76,8 @@
     <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
       <div class="text-sm text-gray-400">
         {{ is_array($footer->copyright_text) ? ($footer->copyright_text[app()->getLocale()] ?? reset($footer->copyright_text)) : $footer->copyright_text }}
-        {{ now()->year }}</div>
+        {{ now()->year }}
+      </div>
       <div class="flex items-center gap-6 mt-4 sm:mt-0 text-sm">
         @foreach(($footer->policies ?? []) as $p)
           <a href="{{ $p['url'] ?? '#' }}"

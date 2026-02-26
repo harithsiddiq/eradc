@@ -86,7 +86,7 @@
   <!-- Mobile menu -->
   <div id="mobileMenu" class="md:hidden">
     <div class="menu-header">
-      <img src="assets/logo-white.svg" alt="EradcHub" class="h-8 w-auto" />
+      <img src="{{ asset('assets/logo.svg') }}" alt="EradcHub" class="h-8 w-auto" />
       <button id="mobileMenuClose"
         class="inline-flex items-center justify-center w-12 h-12 rounded-lg text-white hover:text-white/80"
         aria-label="Close menu">
@@ -115,13 +115,6 @@
           <button class="login-btn" aria-label="Logout">تسجيل الخروج</button>
         </form>
       @endguest
-      <div class="social">
-        <a href="#" aria-label="Facebook"><i class="fi fi-brands-facebook"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fi fi-brands-twitter-alt"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fi fi-brands-instagram"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fi fi-brands-linkedin"></i></a>
-        <a href="#" aria-label="TikTok"><i class="fi fi-brands-tik-tok"></i></a>
-      </div>
       <div class="social">
         <a href="#" aria-label="Facebook"><i class="fi fi-brands-facebook"></i></a>
         <a href="#" aria-label="Twitter"><i class="fi fi-brands-twitter-alt"></i></a>

@@ -86,6 +86,22 @@ class CategoryResource extends Resource
                     ->nullable(),
                 RichEditor::make('description')
                     ->label('وصف الفئة')
+                    ->toolbarButtons([
+                        'attachFiles',
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h1',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'undo',
+                    ])
                     ->columnSpanFull(),
             ]);
     }

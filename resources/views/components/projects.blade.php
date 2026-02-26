@@ -12,8 +12,8 @@
           <div class="swiper mySwiper h-[280px] w-full">
             <div class="swiper-wrapper">
               @foreach ($posts as $post)
-                <div class="swiper-slide">
-                  <div class="relative h-[280px] rounded-2xl overflow-hidden shadow-none">
+                <div class="swiper-slide h-[280px]">
+                  <div class="relative h-full w-full rounded-2xl overflow-hidden shadow-none">
                     <img
                       src="{{ $post->featured_image_path ? Storage::disk('public')->url($post->featured_image_path) : '' }}"
                       alt="{{ $post->title }}" class="w-full h-full object-cover">
