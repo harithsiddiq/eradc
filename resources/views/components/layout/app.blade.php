@@ -388,6 +388,15 @@
         pagination: { el: '.swiper-pagination', clickable: true },
         breakpoints: { 640: { slidesPerView: 2, spaceBetween: 24 }, 1024: { slidesPerView: 3, spaceBetween: 24 } }
       });
+      var infraSwiper = document.querySelector('.infraSwiper');
+      if (infraSwiper) {
+        new Swiper('.infraSwiper', {
+          slidesPerView: 1,
+          spaceBetween: 30,
+          pagination: { el: '.infra-swiper-pagination', clickable: true },
+          breakpoints: { 640: { slidesPerView: 2, spaceBetween: 24 }, 1024: { slidesPerView: 3, spaceBetween: 24 } }
+        });
+      }
       var logoSwiper = new Swiper('.logo-swiper', {
         slidesPerView: 'auto',
         spaceBetween: 32,
