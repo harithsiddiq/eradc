@@ -1,5 +1,5 @@
 <!-- Hero -->
-@if ($post && $category)
+@if ($category)
 {{-- @dd($post, $category) --}}
 <section id="home" class="relative overflow-hidden">
   <div class="absolute inset-0"
@@ -15,16 +15,17 @@
         </div>
         {!! str($category->description)->markdown()->sanitizeHtml() !!}
         <p class="mt-4 text-gray-600 text-base sm:text-lg max-w-2xl">
-          {!! str($post->content)->markdown()->sanitizeHtml() !!}
+          {!! str($post?->content ?? '')->markdown()->sanitizeHtml() !!}
         </p>
         {{-- Debug: Locale={{ app()->getLocale() }} Session={{ session('locale') }} --}}
         @php($reservedKeys = ['hero_btn_primary', 'hero_btn_secondary', 'hero_btn_primary_url', 'hero_btn_secondary_url'])
-        @php($findMeta = fn($key) => $post->meta->first(fn($m) => collect($m->getTranslations('meta_key'))->contains($key)))
+        @php($heroMeta = $post?->meta ?? collect())
+        @php($findMeta = fn($key) => $heroMeta->first(fn($m) => collect($m->getTranslations('meta_key'))->contains($key)))
         @php($btnPrimary = optional($findMeta('hero_btn_primary'))->getTranslation('meta_value', app()->getLocale()) ?: __('explore_courses'))
         @php($btnSecondary = optional($findMeta('hero_btn_secondary'))->getTranslation('meta_value', app()->getLocale()) ?: __('free_consultation'))
         @php($btnPrimaryUrl = optional($findMeta('hero_btn_primary_url'))->getTranslation('meta_value', app()->getLocale()) ?: '#courses')
         @php($btnSecondaryUrl = optional($findMeta('hero_btn_secondary_url'))->getTranslation('meta_value', app()->getLocale()) ?: '#contact')
-        <div class="mt-6 flex flex-wrap items-center justify-center text-center bg-red-700 gap-3 hero-actions"
+        <div class="mt-6 flex flex-wrap items-center justify-center text-center gap-3 hero-actions"
           style="justify-content:center;">
           <a href="{{ $btnPrimaryUrl }}"
             class="inline-flex items-center px-5 py-3 rounded-xl bg-brand-600 text-white font-semibold shadow-glow hover:bg-brand-700">
@@ -34,7 +35,7 @@
           <a href="{{ $btnSecondaryUrl }}"
             class="inline-flex items-center px-5 py-3 rounded-xl border border-slate-300 text-gray-900 font-semibold hover:bg-slate-50">{{ $btnSecondary }}</a>
         </div>
-        @php($heroMetrics = $post->meta->filter(fn($m) => !collect($m->getTranslations('meta_key'))->intersect($reservedKeys)->count()))
+        @php($heroMetrics = $heroMeta->filter(fn($m) => !collect($m->getTranslations('meta_key'))->intersect($reservedKeys)->count()))
         @if($heroMetrics->count())
           <div class="mt-8 flex items-center justify-center gap-6 text-sm text-gray-600 hero-metrics"
             style="justify-content:center;">
@@ -49,8 +50,8 @@
         @endif
       </div>
       <div class="relative">
-        <div class="relative mx-auto w-[320px] h-[320px] sm:w-[380px] sm:h-[120px]">
-          <img src="{{ $post->featured_image_path ? Storage::disk('public')->url($post->featured_image_path) : '' }}"
+        <div class="relative mx-auto w-[320px] h-[320px] sm:w-[380px] sm:h-[380px]">
+          <img src="{{ $post?->featured_image_path ? Storage::disk('public')->url($post->featured_image_path) : '' }}"
             alt="Hero" class="absolute inset-0 w-full h-full object-cover rounded-2xl">
         </div>
       </div>
