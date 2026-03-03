@@ -8,35 +8,28 @@
           {!! $category->description !!}
         </p>
 
-        <div class="services-accordion mt-8 space-y-3">
-          <div class="swiper mySwiper h-[280px] w-full">
-            <div class="swiper-wrapper">
-              @foreach ($posts as $post)
-                <div class="swiper-slide h-[280px]">
-                  <div class="relative h-full w-full rounded-2xl overflow-hidden shadow-none">
-                    <img
-                      src="{{ $post->featured_image_path ? Storage::disk('public')->url($post->featured_image_path) : '' }}"
-                      alt="{{ $post->title }}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0"
-                      style="background: linear-gradient(to bottom, rgba(46,49,146,0.70) 0%, rgba(46,49,146,0.50) 40%, rgba(0,0,0,0.00) 100%);">
-                    </div>
-                    <div class="absolute left-0 right-0 bottom-0 flex items-center justify-between gap-3 p-4">
-                      <div class="flex flex-col">
-                        <span style="color: #fff; font-size: 1rem; font-weight: 800; text-align: start; width: 50%">
-                          {!! $post->title !!}
-                        </span>
-                      </div>
-                      <a href="#" aria-label="{{ __('show_more') }}"
-                        style="width: 44px; height: 44px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); backdrop-filter: blur(2px); align-self: end;">
-                        <i class="fi fi-rr-arrow-left" style="color:#fff; font-size:20px; margin-top:5px;"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-            </div>
-            <div class="swiper-pagination"></div>
-          </div>
+        <div class="mt-8 flex flex-wrap justify-start gap-6">
+          @foreach ($posts as $post)
+            <article class="relative overflow-hidden shadow-sm"
+              style="width: 280px; height: 280px; border-radius: 16px; background: #dbeafe;">
+              <img
+                src="{{ $post->featured_image_path ? Storage::disk('public')->url($post->featured_image_path) : '' }}"
+                alt="{{ $post->title }}" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
+              <div class="absolute inset-0"
+                style="background: linear-gradient(to top, rgba(15,23,42,0.72) 0%, rgba(15,23,42,0.35) 45%, rgba(15,23,42,0.10) 100%);">
+              </div>
+              <div class="absolute left-0 right-0 bottom-0 p-5" style="padding-inline-end: 84px;">
+                <h4 class="text-white text-2xl font-extrabold leading-tight text-right" style="max-width: 100%;">
+                  {!! $post->title !!}
+                </h4>
+              </div>
+              <a href="{{ route('posts.show', $post->slug) }}" aria-label="{{ __('show_more') }}"
+                class="absolute inline-flex items-center justify-center"
+                style="inset-inline-end: 20px; bottom: 20px; width: 44px; height: 44px; border-radius: 9999px; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(2px);">
+                <i class="fi fi-rr-arrow-left" style="color:#fff; font-size:20px; margin-top:5px;"></i>
+              </a>
+            </article>
+          @endforeach
         </div>
       </div>
     </div>

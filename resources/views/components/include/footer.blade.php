@@ -5,7 +5,7 @@
     <div class="grid md:grid-cols-4 gap-8">
       <div class="md:col-span-1">
         <div class="flex items-center gap-2 mb-4 justify-start">
-          <img src="{{ asset('assets/logo.svg') }}" alt="" width="100" class="block mx-auto lg:mx-0">
+          <img src="{{ asset('assets/logo.svg') }}" alt="" width="100" class="block ml-auto rtl:mr-auto lg:mx-0">
           {{-- <span class="font-bold text-xl">{{ is_array($footer->brand_name) ?
             ($footer->brand_name[app()->getLocale()] ?? reset($footer->brand_name)) : $footer->brand_name }}</span><span
             class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-brand-600 text-white font-bold text-lg">EH</span>
