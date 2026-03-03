@@ -8,11 +8,11 @@
         </h3>
         <div class="logo-grid">
           @forelse ($posts as $singlePost)
-            <div class="logo-item"><img
+            <div class="logo-item" style="padding: 0 !important; overflow: hidden;"><img style="width: 100%; height: 100%; object-fit: cover; display: block;"
                 src="{{ $singlePost->featured_image_path ? Storage::disk('public')->url($singlePost->featured_image_path) : '' }}"
                 alt="{{ $singlePost->title }}"></div>
           @empty
-            <div class="logo-item"><img src="{{ asset('assets/logo.svg') }}" alt="{{ __('partner') }} 1"></div>
+            <div class="logo-item" style="padding: 0 !important; overflow: hidden;"><img style="width: 100%; height: 100%; object-fit: cover; display: block;" src="{{ asset('assets/logo.svg') }}" alt="{{ __('partner') }} 1"></div>
           @endforelse
         </div>
       </div>

@@ -10,11 +10,11 @@
           <div class="flex items-center justify-center" style="width: 200px; height: 100px;">
             <img
               src="{{ $singlePost->featured_image_path ? Storage::disk('public')->url($singlePost->featured_image_path) : '' }}"
-              alt="{{ $singlePost->title }}" class="max-h-full max-w-full object-contain" />
+              alt="{{ $singlePost->title }}" class="object-contain" style="width: 200px; height: auto; transform: scale(1.3); transform-origin: center;" />
           </div>
         @empty
           <div class="flex items-center justify-center" style="width: 200px; height: 100px;">
-            <img src="{{ asset('assets/logo.svg') }}" alt="logo1" class="max-h-full max-w-full object-contain" />
+            <img src="{{ asset('assets/logo.svg') }}" alt="logo1" class="object-contain" style="width: 200px; height: auto; transform: scale(1.3); transform-origin: center;" />
           </div>
         @endforelse
       </div>
