@@ -111,8 +111,8 @@
 
       /* Infra Projects: grid of logos (5 per row; 3 on small screens) */
       #infra-projects .logo-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; align-items: center; }
-      #infra-projects .logo-item { display: flex; align-items: center; justify-content: center; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; background: #ffffff; }
-      #infra-projects .logo-item img { width: 100px; height: auto; display: block; }
+      #infra-projects .logo-item { display: flex; align-items: center; justify-content: center; padding: 1.25rem; min-height: 96px; border: 1px solid #e2e8f0; border-radius: 0.75rem; background: #ffffff; }
+      #infra-projects .logo-item img { width: 150px; height: auto; display: block; }
       @media (max-width: 640px) { #infra-projects .logo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     <style>
       /* Hide all sections except the first one (Hero), but show Mission & Vision and Core Values */
@@ -335,13 +335,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1rem;
+        padding: 1.25rem;
+        min-height: 96px;
         border: 1px solid #e2e8f0; /* slate-200 */
         border-radius: 0.75rem; /* rounded-xl */
         background: #ffffff;
       }
       #infra-projects .logo-item img {
-        width: 100px;
+        width: 150px;
         height: auto;
         display: block;
       }
