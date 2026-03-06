@@ -16,7 +16,7 @@
             <article class="relative overflow-hidden shadow-sm"
               style="width: 100%; height: 280px; border-radius: 16px; background: #dbeafe;">
               <img src="{{ $url }}" alt="{{ $media?->getTranslation('alt_text', app()->getLocale()) }}"
-                class="absolute inset-0 h-full w-full object-contain" loading="lazy" />
+                class="absolute inset-0 h-full w-full object-contain" style="object-fit: contain !important" loading="lazy" />
             </article>
           </div>
         @empty
