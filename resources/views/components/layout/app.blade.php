@@ -99,7 +99,7 @@
       #mobileMenu .menu-footer .copy { margin-top: 0.75rem; text-align: center; color: rgba(255,255,255,0.9); font-size: 0.85rem; }
 
       /* Logo marquee using Swiper with edge fades */
-      #logo-marquee .logo-swiper { position: relative; overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent 0, black 60px, black calc(100% - 60px), transparent 100%); }
+      #logo-marquee .logo-swiper { position: relative; overflow: hidden; }
       #logo-marquee .logo-swiper .swiper-wrapper { align-items: center; }
       #logo-marquee .logo-swiper .swiper-slide { width: auto; }
       #logo-marquee .logo-swiper img { display: block; width: 100px; height: auto; }
