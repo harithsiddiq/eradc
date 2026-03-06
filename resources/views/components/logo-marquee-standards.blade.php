@@ -5,21 +5,31 @@
     <div class="text-center">
       <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary-blue mb-6">{{ $category->name }}</h3>
     </div>
-    <div class="logo-swiper swiper">
-      <div class="swiper-wrapper flex justify-center items-center gap-4">
+    <div class="logo-swiper swiper" style="width: 100%;">
+      <div class="swiper-wrapper">
         @php($firstPost = $posts->first())
-        @foreach (($firstPost?->additional_images ?? []) as $img)
-        @php($media = is_numeric($img) ? \App\Models\Media::find($img) : null)
-        @php($src = $media?->file_path ?? $img)
-        @php($url = $src ? Storage::disk('public')->url($src) : '')
-        <div class="swiper-slide flex items-center justify-center">
-          <div class="flex items-center justify-center w-40 h-20">
-            <img src="{{ $url }}" alt="{{ $media?->getTranslation('alt_text', app()->getLocale()) }}"
-              class="max-h-full max-w-full object-contain" />
+        @forelse (($firstPost?->additional_images ?? []) as $img)
+          @php($media = is_numeric($img) ? \App\Models\Media::find($img) : null)
+          @php($src = $media?->file_path ?? $img)
+          @php($url = $src ? Storage::disk('public')->url($src) : '')
+          <div class="swiper-slide" style="height: 280px;">
+            <article class="relative overflow-hidden shadow-sm"
+              style="width: 100%; height: 280px; border-radius: 16px; background: #dbeafe;">
+              <img src="{{ $url }}" alt="{{ $media?->getTranslation('alt_text', app()->getLocale()) }}"
+                class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+            </article>
           </div>
-        </div>
-        @endforeach
+        @empty
+          <div class="swiper-slide" style="height: 280px;">
+            <article class="relative overflow-hidden shadow-sm"
+              style="width: 100%; height: 280px; border-radius: 16px; background: #dbeafe;">
+              <img src="{{ asset('assets/logo.svg') }}" alt="{{ __('partner') }}"
+                class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+            </article>
+          </div>
+        @endforelse
       </div>
+      <div class="swiper-pagination standards-swiper-pagination"></div>
     </div>
   </div>
 </section>

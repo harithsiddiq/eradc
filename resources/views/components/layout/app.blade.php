@@ -293,19 +293,18 @@
       }
       #mobileMenu a:hover { opacity: 0.9; }
 
-      /* Logo marquee using Swiper with edge fades */
+      /* Logo marquee slider */
       #logo-marquee .logo-swiper {
         position: relative;
         overflow: hidden;
-        -webkit-mask-image: linear-gradient(to right, transparent 0, black 60px, black calc(100% - 60px), transparent 100%);
-                mask-image: linear-gradient(to right, transparent 0, black 60px, black calc(100% - 60px), transparent 100%);
       }
       #logo-marquee .logo-swiper .swiper-wrapper { align-items: center; }
-      #logo-marquee .logo-swiper .swiper-slide { width: auto; }
+      #logo-marquee .logo-swiper .swiper-slide { width: 100%; }
       #logo-marquee .logo-swiper img {
         display: block;
-        width: 180px;
-        height: auto;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
       /* Levels section: full-width dark blue border around summary */
@@ -397,16 +396,16 @@
           breakpoints: { 640: { slidesPerView: 2, spaceBetween: 24 }, 1024: { slidesPerView: 3, spaceBetween: 24 } }
         });
       }
-      var logoSwiper = new Swiper('.logo-swiper', {
-        slidesPerView: 'auto',
-        spaceBetween: 32,
-        loop: true,
-        freeMode: true,
-        freeModeMomentum: false,
-        speed: 7000,
-        autoplay: { delay: 0, disableOnInteraction: false },
-        allowTouchMove: true,
-      });
+      var logoSwiper = document.querySelector('.logo-swiper');
+      var standardsPagination = document.querySelector('.standards-swiper-pagination');
+      if (logoSwiper && standardsPagination) {
+        new Swiper('.logo-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 30,
+          pagination: { el: '.standards-swiper-pagination', clickable: true },
+          breakpoints: { 640: { slidesPerView: 2, spaceBetween: 24 }, 1024: { slidesPerView: 3, spaceBetween: 24 } }
+        });
+      }
     </script>
   </body>
 </html>
