@@ -41,7 +41,7 @@
             style="justify-content:center;">
             @foreach($heroMetrics as $metric)
               <div class="flex items-center gap-2">
-                <img src="./assets/up.svg" alt="up" width="25">
+                <img src="./assets/up.svg?v=1" alt="up" width="25">
                 {{ $metric->getTranslation('meta_value', app()->getLocale()) }}
                 {!! nl2br(e($metric->getTranslation('meta_key', app()->getLocale()))) !!}
               </div>
@@ -73,7 +73,7 @@
         ">
           {{-- ERADC Hub Logo --}}
           <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
-            <img src="/assets/logo.svg" alt="ERADC Hub Logo"
+            <img src="/assets/logo.svg?v=1" alt="ERADC Hub Logo"
               style="height:80px; width:auto; object-fit:contain; display:block;">
           </div>
 
@@ -93,7 +93,7 @@
               onmouseover="this.style.transform='scale(1.08)'; this.style.filter='drop-shadow(0 6px 18px rgba(37,99,235,0.3))';"
               onmouseout="this.style.transform='scale(1)'; this.style.filter='none';"
             >
-              <img src="/assets/Britch.jpeg"
+              <img src="/assets/Britch.jpeg?v=1"
                 alt="Accredited CPD Activity – The CPD Standards Office | Provider: 51004 | 2026–2027"
                 style="height:100px; width:auto; object-fit:contain; border-radius:0.5rem;">
             </a>
