@@ -63,9 +63,10 @@
         {{-- Accreditation & Logo Strip --}}
         <div style="
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 2.5rem;
+          gap: 1.5rem;
           width: 100%;
           max-width: 420px;
           padding: 0.5rem 0;
@@ -74,11 +75,7 @@
           <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
             <img src="/assets/logo.svg" alt="ERADC Hub Logo"
               style="height:80px; width:auto; object-fit:contain; display:block;">
-            <span style="font-size:0.7rem; font-weight:700; color:#0071bc; letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap;">ERADC Hub</span>
           </div>
-
-          {{-- Divider --}}
-          <div style="width:1px; height:80px; background:linear-gradient(to bottom, transparent, rgba(37,99,235,0.3), transparent); flex-shrink:0;"></div>
 
           {{-- CPD Standards Badge (clickable) --}}
           <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
@@ -90,7 +87,6 @@
                 display:flex;
                 flex-direction:column;
                 align-items:center;
-                gap:0.4rem;
                 text-decoration:none;
                 transition: transform 0.22s ease, filter 0.22s ease;
               "
@@ -100,7 +96,6 @@
               <img src="/assets/Britch.jpeg"
                 alt="Accredited CPD Activity – The CPD Standards Office | Provider: 51004 | 2026–2027"
                 style="height:100px; width:auto; object-fit:contain; border-radius:0.5rem;">
-              <span style="font-size:0.7rem; font-weight:700; color:#2e3192; letter-spacing:0.07em; text-transform:uppercase; text-align:center; line-height:1.3;">CPD Accredited</span>
             </a>
           </div>
         </div>
