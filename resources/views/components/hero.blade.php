@@ -54,10 +54,10 @@
 
         {{-- Featured image (from CMS) --}}
         @if($post?->featured_image_path)
-        <div class="relative mx-auto w-[320px] h-[280px] sm:w-[380px] sm:h-[320px]">
-          <img src="{{ Storage::disk('public')->url($post->featured_image_path) }}"
-            alt="Hero" class="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-lg">
-        </div>
+          <div class="relative mx-auto w-[320px] h-[280px] sm:w-[380px] sm:h-[320px]">
+            <img src="{{ Storage::disk('public')->url($post->featured_image_path) }}" alt="Hero"
+              class="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-lg">
+          </div>
         @endif
 
         {{-- Accreditation & Logo Strip --}}
@@ -79,11 +79,8 @@
 
           {{-- CPD Standards Badge (clickable) --}}
           <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
-            <a href="https://directory.cpdstandards.com/providers/eradc-hub/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="View ERADC Hub on CPD Standards Directory"
-              style="
+            <a href="https://directory.cpdstandards.com/providers/eradc-hub/" target="_blank" rel="noopener noreferrer"
+              title="View ERADC Hub on CPD Standards Directory" style="
                 display:flex;
                 flex-direction:column;
                 align-items:center;
@@ -91,11 +88,10 @@
                 transition: transform 0.22s ease, filter 0.22s ease;
               "
               onmouseover="this.style.transform='scale(1.08)'; this.style.filter='drop-shadow(0 6px 18px rgba(37,99,235,0.3))';"
-              onmouseout="this.style.transform='scale(1)'; this.style.filter='none';"
-            >
+              onmouseout="this.style.transform='scale(1)'; this.style.filter='none';">
               <img src="/assets/Britch.jpeg?v=1"
                 alt="Accredited CPD Activity – The CPD Standards Office | Provider: 51004 | 2026–2027"
-                style="height:100px; width:auto; object-fit:contain; border-radius:0.5rem;">
+                style="height:160px; width:auto; object-fit:contain; border-radius:0.5rem;">
             </a>
           </div>
         </div>
