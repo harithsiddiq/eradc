@@ -2,17 +2,16 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Forms\Form;
-use Filament\Pages\SettingsPage;
 use App\Settings\FooterSettings;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
-
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Pages\SettingsPage;
 
 class ManageFooter extends SettingsPage
 {

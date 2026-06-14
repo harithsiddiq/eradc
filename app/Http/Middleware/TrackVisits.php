@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Visit;
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\Visit;
 
 class TrackVisits
 {
@@ -20,7 +20,7 @@ class TrackVisits
         $ip = $request->ip();
         $date = now()->toDateString();
 
-        if (!Visit::where('ip', $ip)->where('date', $date)->exists()) {
+        if (! Visit::where('ip', $ip)->where('date', $date)->exists()) {
             Visit::create([
                 'ip' => $ip,
                 'date' => $date,
@@ -32,4 +32,3 @@ class TrackVisits
         return $response;
     }
 }
-

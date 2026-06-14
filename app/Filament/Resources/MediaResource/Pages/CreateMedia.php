@@ -10,6 +10,7 @@ use Filament\Resources\Pages\CreateRecord\Concerns\Translatable as CreateTransla
 class CreateMedia extends CreateRecord
 {
     use CreateTranslatable;
+
     protected static string $resource = MediaResource::class;
 
     protected function getHeaderActions(): array

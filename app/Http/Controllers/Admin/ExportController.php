@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Post;
 use App\Models\PostMeta;
-use App\Models\Media;
+use Illuminate\Http\Request;
 
 class ExportController extends Controller
 {
     public function export(Request $request)
     {
         $user = $request->user();
-        if (!$user || $user->type !== 'admin') {
+        if (! $user || $user->type !== 'admin') {
             abort(403);
         }
 
@@ -29,12 +28,13 @@ class ExportController extends Controller
                     foreach ($value as $k => $v) {
                         $valStr = $encode($v);
                         if ($isAssoc) {
-                            $items[] = var_export($k, true) . ' => ' . $valStr;
+                            $items[] = var_export($k, true).' => '.$valStr;
                         } else {
                             $items[] = $valStr;
                         }
                     }
-                    return '[' . implode(', ', $items) . ']';
+
+                    return '['.implode(', ', $items).']';
                 }
                 if (is_string($value)) {
                     return var_export($value, true);
@@ -42,9 +42,11 @@ class ExportController extends Controller
                 if (is_bool($value) || is_int($value) || is_float($value) || is_null($value)) {
                     return var_export($value, true);
                 }
+
                 return var_export((string) $value, true);
             };
-            return "<?php\n\nreturn " . $encode($data) . ";\n";
+
+            return "<?php\n\nreturn ".$encode($data).";\n";
         };
 
         // Categories
@@ -59,7 +61,7 @@ class ExportController extends Controller
                 'description' => $c->getTranslations('description'),
             ];
         })->toArray();
-        file_put_contents($base . '/category.php', $toPhp($categories));
+        file_put_contents($base.'/category.php', $toPhp($categories));
 
         // Posts
         $posts = Post::with(['author', 'category'])->orderBy('created_at')->get()->map(function ($p) {
@@ -75,7 +77,7 @@ class ExportController extends Controller
                 'category_slug' => optional($p->category)->slug,
             ];
         })->toArray();
-        file_put_contents($base . '/posts.php', $toPhp($posts));
+        file_put_contents($base.'/posts.php', $toPhp($posts));
 
         // Post meta
         $metas = PostMeta::with('post')->orderBy('post_id')->get()->map(function ($m) {
@@ -85,7 +87,7 @@ class ExportController extends Controller
                 'meta_value' => $m->getTranslations('meta_value'),
             ];
         })->toArray();
-        file_put_contents($base . '/post_meta.php', $toPhp($metas));
+        file_put_contents($base.'/post_meta.php', $toPhp($metas));
 
         // Media
         $media = Media::orderBy('created_at')->get()->map(function ($m) {
@@ -97,7 +99,7 @@ class ExportController extends Controller
                 'alt_text' => $m->getTranslations('alt_text'),
             ];
         })->toArray();
-        file_put_contents($base . '/media.php', $toPhp($media));
+        file_put_contents($base.'/media.php', $toPhp($media));
 
         return response()->json(['status' => 'ok']);
     }

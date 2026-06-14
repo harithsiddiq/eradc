@@ -10,6 +10,7 @@ use Filament\Resources\Pages\ListRecords\Concerns\Translatable as ListTranslatab
 class ListPosts extends ListRecords
 {
     use ListTranslatable;
+
     protected static string $resource = PostResource::class;
 
     protected function getHeaderActions(): array

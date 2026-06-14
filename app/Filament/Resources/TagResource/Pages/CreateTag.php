@@ -10,6 +10,7 @@ use Filament\Resources\Pages\CreateRecord\Concerns\Translatable as CreateTransla
 class CreateTag extends CreateRecord
 {
     use CreateTranslatable;
+
     protected static string $resource = TagResource::class;
 
     protected function getHeaderActions(): array

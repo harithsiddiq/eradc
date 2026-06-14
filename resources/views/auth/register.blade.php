@@ -75,9 +75,9 @@
             <!-- Level selection toggle -->
             <div>
               <div class="level-toggle mb-2 flex justify-center">
-                <label class="option"><input type="radio" name="level" value="fresh" {{ old('level', 'fresh') === 'fresh' ? 'checked' : '' }}> حديث التخرج</label>
-                <label class="option"><input type="radio" name="level" value="mid" {{ old('level') === 'mid' ? 'checked' : '' }}> متوسط الخبرة</label>
-                <label class="option"><input type="radio" name="level" value="consultant" {{ old('level') === 'consultant' ? 'checked' : '' }}> استشاري</label>
+                <label class="option"><input type="radio" name="level" value="fresh" {{ old('level', 'fresh') === 'fresh' ? 'checked' : '' }}> {{ __('auth.register.level_fresh') }}</label>
+                <label class="option"><input type="radio" name="level" value="mid" {{ old('level') === 'mid' ? 'checked' : '' }}> {{ __('auth.register.level_mid') }}</label>
+                <label class="option"><input type="radio" name="level" value="consultant" {{ old('level') === 'consultant' ? 'checked' : '' }}> {{ __('auth.register.level_consultant') }}</label>
               </div>
               @error('level')
                 <p class="mt-1 text-xs text-red-600 text-center">{{ $message }}</p>

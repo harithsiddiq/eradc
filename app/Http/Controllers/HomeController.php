@@ -9,8 +9,8 @@ class HomeController extends Controller
     public function index()
     {
         $posts = Category::with(['posts' => function ($q) {
-                $q->where('show_on_landing', true);
-            }])
+            $q->where('show_on_landing', true);
+        }])
             ->whereNull('parent_id')
             ->orderBy('order')
             ->get();

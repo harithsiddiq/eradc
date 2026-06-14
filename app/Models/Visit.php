@@ -16,4 +16,3 @@ class Visit extends Model
         'user_id',
     ];
 }
-

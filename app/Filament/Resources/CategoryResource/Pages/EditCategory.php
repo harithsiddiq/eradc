@@ -10,6 +10,7 @@ use Filament\Resources\Pages\EditRecord\Concerns\Translatable as EditTranslatabl
 class EditCategory extends EditRecord
 {
     use EditTranslatable;
+
     protected static string $resource = CategoryResource::class;
 
     protected function getHeaderActions(): array

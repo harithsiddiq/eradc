@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\TrackVisits;
 use App\Http\Controllers\Admin\ExportController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
-use App\Models\Post;
+use App\Http\Controllers\HomeController;
+use App\Http\Middleware\TrackVisits;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(TrackVisits::class)->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -17,6 +17,7 @@ Route::middleware(TrackVisits::class)->group(function () {
             session(['locale' => $locale]);
             app()->setLocale($locale);
         }
+
         return redirect()->back();
     })->name('lang.switch');
 
@@ -27,7 +28,6 @@ Route::middleware(TrackVisits::class)->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
     });
 
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
     Route::get('/test', function () {
         return $post = Post::with('meta')->first();
     });
@@ -54,11 +54,13 @@ Route::middleware(TrackVisits::class)->group(function () {
             })
             ->latest('created_at')
             ->paginate(12);
+
         return view('pages.posts', compact('posts'));
     })->name('posts.index');
 
     Route::get('/post/{slug}', function (string $slug) {
-     $post = Post::with(['author', 'category', 'meta'])->where('slug', $slug)->firstOrFail();
+        $post = Post::with(['author', 'category', 'meta'])->where('slug', $slug)->firstOrFail();
+
         return view('pages.post', compact('post'));
     })->name('posts.show');
 
@@ -75,6 +77,7 @@ Route::middleware(TrackVisits::class)->group(function () {
     Route::get('/curse/{slug}', function (string $slug) {
         $post = Post::with(['author', 'category', 'meta'])->where('slug', $slug)->firstOrFail();
         $category = $post->category ? Category::with(['posts', 'children.posts'])->find($post->category_id) : null;
+
         return view('pages.curse', compact('post', 'category'));
     })->name('curse');
 });
@@ -85,14 +88,28 @@ Route::middleware('auth')->group(function () {
     })->name('verification.notice');
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        return redirect()->intended('/');
+        if (! $request->user()->hasVerifiedEmail()) {
+            $request->fulfill();
+        }
+
+        $request->user()->update(['is_active' => true]);
+
+        return redirect()->route('home')->with('verified', true);
     })->middleware(['signed'])->name('verification.verify');
 
     Route::post('/email/verification-notification', function (Request $request) {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('home');
+        }
+
         $request->user()->sendEmailVerificationNotification();
+
         return back()->with('status', 'verification-link-sent');
     })->middleware(['throttle:6,1'])->name('verification.send');
 
-    Route::get('/admin/export-data', [ExportController::class, 'export'])->middleware('verified')->name('admin.export');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::get('/admin/export-data', [ExportController::class, 'export'])->name('admin.export');
 });

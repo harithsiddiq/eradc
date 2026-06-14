@@ -3,34 +3,35 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Post;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TextInput as FormsTextInput;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Illuminate\Support\Str;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TextInput as FormsTextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Concerns\Translatable;
-use App\Models\Media;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 class PostResource extends Resource
 {
     use Translatable;
+
     protected static ?string $model = Post::class;
+
     protected static array $mediaGuidelineCache = [];
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
@@ -141,7 +142,7 @@ class PostResource extends Resource
                                 ->disk('public')
                                 ->directory('posts/featured')
                                 ->visibility('public')
-                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) \Illuminate\Support\Str::uuid() . '.' . $file->getClientOriginalExtension())
+                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) Str::uuid().'.'.$file->getClientOriginalExtension())
                                 ->default(fn ($record) => $record?->featured_image_path),
                             FileUpload::make('gallery')
                                 ->label('صور إضافية')
@@ -152,9 +153,12 @@ class PostResource extends Resource
                                 ->disk('public')
                                 ->directory('posts/gallery')
                                 ->visibility('public')
-                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) \Illuminate\Support\Str::uuid() . '.' . $file->getClientOriginalExtension())
+                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) Str::uuid().'.'.$file->getClientOriginalExtension())
                                 ->default(function ($record) {
-                                    if (!$record || !is_array($record->additional_images)) return [];
+                                    if (! $record || ! is_array($record->additional_images)) {
+                                        return [];
+                                    }
+
                                     return Media::whereIn('id', $record->additional_images)->pluck('file_path')->toArray();
                                 })
                                 ->columnSpanFull(),
@@ -265,9 +269,9 @@ class PostResource extends Resource
         ];
     }
 
-    protected static function resolveMediaGuidelines(?int $categoryId): ?\Illuminate\Support\HtmlString
+    protected static function resolveMediaGuidelines(?int $categoryId): ?HtmlString
     {
-        if (!$categoryId) {
+        if (! $categoryId) {
             return null;
         }
 
@@ -276,7 +280,7 @@ class PostResource extends Resource
         }
 
         $category = Category::query()->select(['id', 'layout_style', 'name'])->find($categoryId);
-        if (!$category) {
+        if (! $category) {
             return static::$mediaGuidelineCache[$categoryId] = null;
         }
 
@@ -305,10 +309,10 @@ class PostResource extends Resource
 
         $listItems = '';
         foreach ($messages[$layout] as $line) {
-            $listItems .= '<li>' . e($line) . '</li>';
+            $listItems .= '<li>'.e($line).'</li>';
         }
 
-        $title = 'تعليمات الوسائط لقسم ' . e($category->name);
+        $title = 'تعليمات الوسائط لقسم '.e($category->name);
         $content = <<<HTML
 <div class="space-y-2">
     <p class="text-sm font-semibold text-gray-700">{$title}</p>
@@ -316,12 +320,12 @@ class PostResource extends Resource
 </div>
 HTML;
 
-        return static::$mediaGuidelineCache[$categoryId] = new \Illuminate\Support\HtmlString($content);
+        return static::$mediaGuidelineCache[$categoryId] = new HtmlString($content);
     }
 
     protected static function normalizeLayoutStyle(?string $layoutStyle): ?string
     {
-        if (!$layoutStyle) {
+        if (! $layoutStyle) {
             return null;
         }
 

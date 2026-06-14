@@ -2,13 +2,13 @@
 
 namespace App\Filament\Widgets;
 
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\Category;
-use App\Models\Post;
 use App\Models\Media;
+use App\Models\Post;
 use App\Models\User;
 use App\Models\Visit;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class SystemStatsWidget extends BaseWidget
 {
