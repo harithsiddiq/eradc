@@ -82,5 +82,12 @@
   "no_items": "No items found",
   "partner": "Partner",
   "courses.index_title": "Our Training Courses",
-  "courses.index_subtitle": "Browse our variety of specialized engineering courses"
+  "courses.index_subtitle": "Browse our variety of specialized engineering courses",
+  "nav.profile": "Profile",
+  "nav.my_courses": "My Courses",
+  "nav.logout": "Logout",
+  "lesson.toggle_sidebar": "Course Content",
+  "lesson.description": "Description",
+  "lesson.lessons_count": "lessons",
+  "lesson.preview": "Free"
 }

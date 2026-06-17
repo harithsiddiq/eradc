@@ -82,5 +82,12 @@
   "no_items": "لا توجد عناصر",
   "partner": "شريك",
   "courses.index_title": "دوراتنا التدريبية",
-  "courses.index_subtitle": "تصفح مجموعتنا المتنوعة من الدورات الهندسية المتخصصة"
+  "courses.index_subtitle": "تصفح مجموعتنا المتنوعة من الدورات الهندسية المتخصصة",
+  "nav.profile": "الملف الشخصي",
+  "nav.my_courses": "دوراتي",
+  "nav.logout": "تسجيل الخروج",
+  "lesson.toggle_sidebar": "محتوى الدورة",
+  "lesson.description": "الوصف",
+  "lesson.lessons_count": "دروس",
+  "lesson.preview": "مجاني"
 }
