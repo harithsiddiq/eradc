@@ -5,104 +5,234 @@
         @endpush
     @endif
 
-    <div class="min-h-screen bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col lg:flex-row gap-6" x-data="{ sidebarOpen: true }">
+    @push('head')
+    <style>
+        .lesson-page {
+            background: #f8fafc;
+            min-height: calc(100vh - 80px);
+            padding: 24px 16px;
+        }
+        .lesson-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+            align-items: flex-start;
+        }
 
-                {{-- ─── LEFT: Sidebar Lesson List ─── --}}
-                <aside class="w-full lg:w-72 xl:w-80 flex-shrink-0">
+        /* ── Sidebar ── */
+        .lesson-sidebar {
+            width: 300px;
+            min-width: 260px;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            position: sticky;
+            top: 24px;
+            max-height: calc(100vh - 48px);
+            display: flex;
+            flex-direction: column;
+        }
+        .lesson-sidebar__header {
+            background: #1e293b;
+            color: #fff;
+            padding: 16px;
+            flex-shrink: 0;
+        }
+        .lesson-sidebar__title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin: 0 0 4px;
+        }
+        .lesson-sidebar__count {
+            font-size: 12px;
+            color: #94a3b8;
+            margin: 0;
+        }
+        .lesson-sidebar__list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .lesson-sidebar__item a {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: background 0.15s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .lesson-sidebar__item a:hover { background: #f8fafc; }
+        .lesson-sidebar__item--active a {
+            background: #eff6ff;
+            border-left-color: #2563eb;
+        }
+        .lesson-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .lesson-sidebar__item--active .lesson-num {
+            background: #2563eb;
+            color: #fff;
+        }
+        .lesson-meta { flex: 1; min-width: 0; }
+        .lesson-meta__title {
+            font-size: 13px;
+            color: #1e293b;
+            font-weight: 500;
+            line-height: 1.35;
+            margin: 0 0 3px;
+            word-break: break-word;
+        }
+        .lesson-sidebar__item--active .lesson-meta__title {
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+        .lesson-meta__duration {
+            font-size: 11px;
+            color: #94a3b8;
+            margin: 0;
+        }
+        .lesson-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 99px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .lesson-badge--free { background: #dcfce7; color: #15803d; }
+        .lesson-lock { color: #94a3b8; flex-shrink: 0; width: 16px; height: 16px; }
 
-                    {{-- Mobile toggle --}}
-                    <button
-                        @click="sidebarOpen = !sidebarOpen"
-                        class="lg:hidden w-full flex items-center justify-between mb-3 p-3 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-gray-700">
-                        <span>Course Content</span>
-                        <svg class="w-5 h-5 transition-transform" :class="sidebarOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
+        /* ── Main video area ── */
+        .lesson-main { flex: 1; min-width: 0; }
+        .lesson-video-wrap {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,.18);
+        }
+        .lesson-video-wrap iframe,
+        .lesson-video-wrap video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+        }
+        .lesson-info {
+            margin-top: 16px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+        }
+        .lesson-info__title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 12px;
+        }
+        .lesson-info__pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .lesson-info__desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.7;
+            margin: 0;
+        }
 
-                    <div x-show="sidebarOpen" x-cloak class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden lg:sticky lg:top-6">
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .lesson-container { flex-direction: column; }
+            .lesson-sidebar {
+                width: 100%;
+                min-width: unset;
+                position: static;
+                max-height: 320px;
+            }
+        }
+    </style>
+    @endpush
 
-                        {{-- Course header --}}
-                        <div class="p-4 bg-gray-800 text-white">
-                            <h3 class="font-bold text-sm leading-tight">{{ $course->title }}</h3>
-                            <p class="text-gray-400 text-xs mt-1">{{ $lessons->count() }} lessons</p>
-                        </div>
+    <div class="lesson-page">
+        <div class="lesson-container">
 
-                        {{-- Lesson list --}}
-                        <ul class="divide-y divide-gray-100 overflow-y-auto max-h-[70vh]">
-                            @foreach($lessons as $sidebarLesson)
-                                @php $isCurrent = $sidebarLesson->id === $lesson->id; @endphp
-                                <li>
-                                    <a href="{{ route('lesson.show', ['course' => $course->slug, 'lesson' => $sidebarLesson->slug]) }}"
-                                       class="flex items-start gap-3 px-4 py-3 transition-colors
-                                              {{ $isCurrent ? 'bg-blue-50 border-l-4 border-blue-600' : 'border-l-4 border-transparent hover:bg-gray-50' }}">
-
-                                        {{-- Number / icon --}}
-                                        <span class="flex-shrink-0 mt-0.5 w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold
-                                                     {{ $isCurrent ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600' }}">
-                                            {{ $sidebarLesson->order }}
-                                        </span>
-
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm leading-tight {{ $isCurrent ? 'font-bold text-blue-700' : 'text-gray-800' }}">
-                                                {{ $sidebarLesson->title }}
-                                            </p>
-                                            @if($sidebarLesson->duration_seconds)
-                                                <p class="text-xs text-gray-400 mt-0.5">{{ gmdate('i:s', $sidebarLesson->duration_seconds) }}</p>
-                                            @endif
-                                        </div>
-
-                                        {{-- Badge --}}
-                                        @if($sidebarLesson->is_preview)
-                                            <span class="flex-shrink-0 text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">Free</span>
-                                        @elseif(!$isEnrolled)
-                                            <svg class="flex-shrink-0 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                            </svg>
-                                        @endif
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </aside>
-
-                {{-- ─── RIGHT: Video Player + Info ─── --}}
-                <main class="flex-1 min-w-0">
-
-                    {{-- Video player --}}
-                    <div class="bg-black rounded-xl overflow-hidden shadow-lg w-full" style="aspect-ratio: 16/9;">
-                        <x-lesson.video-player :lesson="$lesson" :course="$course" />
-                    </div>
-
-                    {{-- Lesson title & meta --}}
-                    <div class="mt-5 bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                        <h1 class="text-2xl font-bold text-gray-900">{{ $lesson->title }}</h1>
-
-                        <div class="flex flex-wrap gap-3 mt-3">
-                            @if($lesson->is_preview)
-                                <span class="text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">Free Preview</span>
-                            @endif
-                            @if($lesson->duration_seconds)
-                                <span class="text-xs text-gray-500 flex items-center gap-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            {{-- ── Sidebar ── --}}
+            <aside class="lesson-sidebar">
+                <div class="lesson-sidebar__header">
+                    <p class="lesson-sidebar__title">{{ $course->title }}</p>
+                    <p class="lesson-sidebar__count">{{ $lessons->count() }} lessons</p>
+                </div>
+                <ul class="lesson-sidebar__list">
+                    @foreach($lessons as $sidebarLesson)
+                        @php $isCurrent = $sidebarLesson->id === $lesson->id; @endphp
+                        <li class="lesson-sidebar__item {{ $isCurrent ? 'lesson-sidebar__item--active' : '' }}">
+                            <a href="{{ route('lesson.show', ['course' => $course->slug, 'lesson' => $sidebarLesson->slug]) }}">
+                                <span class="lesson-num">{{ $sidebarLesson->order }}</span>
+                                <div class="lesson-meta">
+                                    <p class="lesson-meta__title">{{ $sidebarLesson->title }}</p>
+                                    @if($sidebarLesson->duration_seconds)
+                                        <p class="lesson-meta__duration">{{ gmdate('i:s', $sidebarLesson->duration_seconds) }}</p>
+                                    @endif
+                                </div>
+                                @if($sidebarLesson->is_preview)
+                                    <span class="lesson-badge lesson-badge--free">Free</span>
+                                @elseif(!$isEnrolled)
+                                    <svg class="lesson-lock" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
-                                    {{ gmdate('i:s', $lesson->duration_seconds) }}
-                                </span>
-                            @endif
-                        </div>
+                                @endif
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </aside>
 
-                        @if($lesson->description)
-                            <p class="mt-4 text-gray-600 leading-relaxed">{{ $lesson->description }}</p>
+            {{-- ── Video + Info ── --}}
+            <main class="lesson-main">
+                <div class="lesson-video-wrap">
+                    <x-lesson.video-player :lesson="$lesson" :course="$course" />
+                </div>
+                <div class="lesson-info">
+                    <h1 class="lesson-info__title">{{ $lesson->title }}</h1>
+                    <div class="lesson-info__pills">
+                        @if($lesson->is_preview)
+                            <span class="lesson-badge lesson-badge--free">Free Preview</span>
+                        @endif
+                        @if($lesson->duration_seconds)
+                            <span style="font-size:12px;color:#64748b;">⏱ {{ gmdate('i:s', $lesson->duration_seconds) }}</span>
                         @endif
                     </div>
+                    @if($lesson->description)
+                        <p class="lesson-info__desc">{{ $lesson->description }}</p>
+                    @endif
+                </div>
+            </main>
 
-                </main>
-
-            </div>
         </div>
     </div>
 </x-layout.app>
