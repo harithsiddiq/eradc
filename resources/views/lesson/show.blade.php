@@ -4,73 +4,105 @@
             <meta name="robots" content="noindex, nofollow">
         @endpush
     @endif
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ sidebarOpen: false }">
-        <div class="flex flex-col lg:flex-row gap-8">
-            
-            <!-- Mobile Sidebar Toggle -->
-            <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden flex items-center gap-2 text-primary-600 font-semibold mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                <span>{{ __('lesson.toggle_sidebar') ?? 'Course Content' }}</span>
-            </button>
 
-            <!-- Video Player Area -->
-            <div class="flex-1 lg:order-last">
-                <h1 class="text-3xl font-bold mb-4">{{ $lesson->title }}</h1>
-                
-                <div class="bg-black rounded-lg overflow-hidden aspect-video shadow-lg mb-6">
-                    <x-lesson.video-player :lesson="$lesson" :course="$course" />
-                </div>
-                
-                <div class="prose max-w-none">
-                    <h2 class="text-xl font-semibold mb-2">{{ __('lesson.description') ?? 'Description' }}</h2>
-                    <p class="text-gray-700 leading-relaxed">{{ $lesson->description }}</p>
-                </div>
-            </div>
+    <div class="min-h-screen bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col lg:flex-row gap-6" x-data="{ sidebarOpen: true }">
 
-            <!-- Sidebar / Lesson List -->
-            <div :class="{'hidden': !sidebarOpen, 'block': sidebarOpen}" class="lg:block w-full lg:w-80 flex-shrink-0 lg:order-first">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden sticky top-8">
-                    <div class="p-4 bg-gray-50 border-b border-gray-200">
-                        <h3 class="font-bold text-lg truncate" title="{{ $course->title }}">{{ $course->title }}</h3>
-                        <p class="text-sm text-gray-500 mt-1">
-                            {{ $lessons->count() }} {{ __('lesson.lessons_count') ?? 'lessons' }}
-                        </p>
-                    </div>
-                    
-                    <ul class="divide-y divide-gray-100 max-h-[calc(100vh-200px)] overflow-y-auto">
-                        @foreach($lessons as $sidebarLesson)
-                            <li>
-                                <a href="{{ route('lesson.show', ['course' => $course->slug, 'lesson' => $sidebarLesson->slug]) }}" 
-                                   class="block p-4 hover:bg-primary-50 transition-colors {{ $sidebarLesson->id === $lesson->id ? 'bg-primary-50 border-l-4 border-primary-600' : 'border-l-4 border-transparent' }}">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex-1 min-w-0 pr-4">
-                                            <p class="text-sm font-medium text-gray-900 truncate {{ $sidebarLesson->id === $lesson->id ? 'text-primary-700 font-bold' : '' }}">
-                                                {{ $sidebarLesson->order }}. {{ $sidebarLesson->title }}
+                {{-- ─── LEFT: Sidebar Lesson List ─── --}}
+                <aside class="w-full lg:w-72 xl:w-80 flex-shrink-0">
+
+                    {{-- Mobile toggle --}}
+                    <button
+                        @click="sidebarOpen = !sidebarOpen"
+                        class="lg:hidden w-full flex items-center justify-between mb-3 p-3 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-gray-700">
+                        <span>Course Content</span>
+                        <svg class="w-5 h-5 transition-transform" :class="sidebarOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+
+                    <div x-show="sidebarOpen" x-cloak class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden lg:sticky lg:top-6">
+
+                        {{-- Course header --}}
+                        <div class="p-4 bg-gray-800 text-white">
+                            <h3 class="font-bold text-sm leading-tight">{{ $course->title }}</h3>
+                            <p class="text-gray-400 text-xs mt-1">{{ $lessons->count() }} lessons</p>
+                        </div>
+
+                        {{-- Lesson list --}}
+                        <ul class="divide-y divide-gray-100 overflow-y-auto max-h-[70vh]">
+                            @foreach($lessons as $sidebarLesson)
+                                @php $isCurrent = $sidebarLesson->id === $lesson->id; @endphp
+                                <li>
+                                    <a href="{{ route('lesson.show', ['course' => $course->slug, 'lesson' => $sidebarLesson->slug]) }}"
+                                       class="flex items-start gap-3 px-4 py-3 transition-colors
+                                              {{ $isCurrent ? 'bg-blue-50 border-l-4 border-blue-600' : 'border-l-4 border-transparent hover:bg-gray-50' }}">
+
+                                        {{-- Number / icon --}}
+                                        <span class="flex-shrink-0 mt-0.5 w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold
+                                                     {{ $isCurrent ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600' }}">
+                                            {{ $sidebarLesson->order }}
+                                        </span>
+
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm leading-tight {{ $isCurrent ? 'font-bold text-blue-700' : 'text-gray-800' }}">
+                                                {{ $sidebarLesson->title }}
                                             </p>
-                                            <p class="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                                                @if($sidebarLesson->duration_seconds)
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                    {{ gmdate('i:s', $sidebarLesson->duration_seconds) }}
-                                                @endif
-                                            </p>
+                                            @if($sidebarLesson->duration_seconds)
+                                                <p class="text-xs text-gray-400 mt-0.5">{{ gmdate('i:s', $sidebarLesson->duration_seconds) }}</p>
+                                            @endif
                                         </div>
+
+                                        {{-- Badge --}}
                                         @if($sidebarLesson->is_preview)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                                                {{ __('lesson.preview') ?? 'Free' }}
-                                            </span>
+                                            <span class="flex-shrink-0 text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">Free</span>
                                         @elseif(!$isEnrolled)
-                                            <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            <svg class="flex-shrink-0 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            </svg>
                                         @endif
-                                    </div>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </aside>
+
+                {{-- ─── RIGHT: Video Player + Info ─── --}}
+                <main class="flex-1 min-w-0">
+
+                    {{-- Video player --}}
+                    <div class="bg-black rounded-xl overflow-hidden shadow-lg w-full" style="aspect-ratio: 16/9;">
+                        <x-lesson.video-player :lesson="$lesson" :course="$course" />
+                    </div>
+
+                    {{-- Lesson title & meta --}}
+                    <div class="mt-5 bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                        <h1 class="text-2xl font-bold text-gray-900">{{ $lesson->title }}</h1>
+
+                        <div class="flex flex-wrap gap-3 mt-3">
+                            @if($lesson->is_preview)
+                                <span class="text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">Free Preview</span>
+                            @endif
+                            @if($lesson->duration_seconds)
+                                <span class="text-xs text-gray-500 flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {{ gmdate('i:s', $lesson->duration_seconds) }}
+                                </span>
+                            @endif
+                        </div>
+
+                        @if($lesson->description)
+                            <p class="mt-4 text-gray-600 leading-relaxed">{{ $lesson->description }}</p>
+                        @endif
+                    </div>
+
+                </main>
+
             </div>
-            
         </div>
     </div>
 </x-layout.app>
