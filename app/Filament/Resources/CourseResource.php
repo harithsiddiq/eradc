@@ -45,7 +45,8 @@ class CourseResource extends Resource
                     ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('thumbnail')
+                Forms\Components\FileUpload::make('thumbnail_path')
+                    ->label('Thumbnail')
                     ->image()
                     ->directory('courses')
                     ->columnSpanFull(),
