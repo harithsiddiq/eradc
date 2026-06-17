@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
+use App\Models\Course;
+use App\Settings\CourseSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -63,12 +65,14 @@ class LessonsRelationManager extends RelationManager
                 // Show file upload only when provider = 'upload'
                 Forms\Components\FileUpload::make('video_file_path')
                     ->label('Video File')
-                    ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'])
-                    ->maxSize(1024 * 10) // 10 GB max
+                    ->acceptedFileTypes(
+                        array_map('trim', explode(',', app(CourseSettings::class)->allowed_video_types))
+                    )
+                    ->maxSize(app(CourseSettings::class)->max_video_upload_mb * 1024) // MB → KB for Filament
                     ->disk('local')
                     ->directory('lessons/videos')
                     ->visibility('private')
-                    ->helperText('Upload an MP4, WebM or MOV file. Stored privately — users cannot download it directly.')
+                    ->helperText(fn () => 'Max size: ' . app(CourseSettings::class)->max_video_upload_mb . ' MB. Stored privately — users cannot download it directly.')
                     ->columnSpanFull()
                     ->visible(fn (Get $get): bool => $get('video_provider') === 'upload'),
 
