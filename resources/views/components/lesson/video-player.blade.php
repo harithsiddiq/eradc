@@ -1,28 +1,42 @@
 @props(['lesson', 'course'])
 
 @php
-    // Convert any YouTube URL format to a proper embed URL
-    $videoUrl = $lesson->video_url;
+    $provider = $lesson->video_provider;
 
-    if ($lesson->video_provider === 'youtube') {
-        // Extract the video ID from various YouTube URL formats
-        preg_match(
-            '/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/',
-            $videoUrl,
-            $matches
-        );
-        $videoId = $matches[1] ?? null;
-        $videoUrl = $videoId
-            ? "https://www.youtube.com/embed/{$videoId}?rel=0&modestbranding=1"
-            : $videoUrl;
-    }
+    // ── Resolve the correct video source ──────────────────────────
+    if ($provider === 'upload') {
+        // Use the secure stream route — real file path is never exposed
+        $videoSrc = route('lesson.stream', ['course' => $course->slug, 'lesson' => $lesson->slug]);
+        $useHtml5  = true;
+        $isHls     = false;
 
-    if ($lesson->video_provider === 'vimeo') {
-        preg_match('/vimeo\.com\/(\d+)/', $videoUrl, $matches);
-        $videoId = $matches[1] ?? null;
-        $videoUrl = $videoId
-            ? "https://player.vimeo.com/video/{$videoId}"
-            : $videoUrl;
+    } elseif ($provider === 'direct') {
+        $videoSrc = $lesson->video_url;
+        $useHtml5  = true;
+        $isHls     = false;
+
+    } elseif ($provider === 'hls') {
+        $videoSrc = $lesson->video_url;
+        $useHtml5  = true;
+        $isHls     = true;
+
+    } elseif ($provider === 'youtube') {
+        preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $lesson->video_url ?? '', $m);
+        $videoId  = $m[1] ?? null;
+        $videoSrc = $videoId ? "https://www.youtube.com/embed/{$videoId}?rel=0&modestbranding=1" : $lesson->video_url;
+        $useHtml5  = false;
+        $isHls     = false;
+
+    } elseif ($provider === 'vimeo') {
+        preg_match('/vimeo\.com\/(\d+)/', $lesson->video_url ?? '', $m);
+        $videoId  = $m[1] ?? null;
+        $videoSrc = $videoId ? "https://player.vimeo.com/video/{$videoId}" : $lesson->video_url;
+        $useHtml5  = false;
+        $isHls     = false;
+    } else {
+        $videoSrc = null;
+        $useHtml5  = false;
+        $isHls     = false;
     }
 
     $isEnrolled = auth()->check()
@@ -32,6 +46,7 @@
             ->exists();
 @endphp
 
+{{-- ── Download-prevention wrapper ────────────────────────────────────── --}}
 <div
     x-data="videoPlayer({
         progressUrl: '{{ route('lesson.progress', ['course' => $course->slug, 'lesson' => $lesson->slug]) }}',
@@ -39,52 +54,73 @@
         isEnrolled: {{ $isEnrolled ? 'true' : 'false' }}
     })"
     class="w-full h-full relative bg-black"
+    {{-- Block right-click context menu on the whole player --}}
+    @contextmenu.prevent
+    style="user-select:none; -webkit-user-select:none;"
 >
 
-    @if($lesson->video_provider === 'youtube' || $lesson->video_provider === 'vimeo')
+    @if($videoSrc && $useHtml5)
+        {{-- ── HTML5 player (uploaded, direct, HLS) ── --}}
+        <video
+            x-ref="videoElement"
+            controls
+            playsinline
+            class="w-full h-full object-contain"
+            controlsList="nodownload nofullscreen-download"
+            disablePictureInPicture
+            oncontextmenu="return false;"
+            @if($isHls)
+                data-hls-url="{{ $videoSrc }}"
+            @else
+                src="{{ $videoSrc }}"
+            @endif
+        ></video>
 
-        <iframe
-            class="w-full h-full"
-            src="{{ $videoUrl }}"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-        ></iframe>
+        @if($isHls)
+            <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        @endif
 
+        {{-- Mark-complete button for enrolled users --}}
         @if($isEnrolled)
-            <div x-show="!completed" class="absolute bottom-4 right-4 z-10">
+            <div x-show="!completed" style="position:absolute;bottom:16px;right:16px;z-index:10;">
                 <button
                     @click="markComplete"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-semibold transition-colors">
+                    style="background:#2563eb;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;">
                     ✓ Mark as Complete
                 </button>
             </div>
-            <div x-show="completed" x-cloak class="absolute bottom-4 right-4 z-10">
-                <span class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-semibold">
+            <div x-show="completed" x-cloak style="position:absolute;bottom:16px;right:16px;z-index:10;">
+                <span style="background:#16a34a;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;">
                     ✓ Completed
                 </span>
             </div>
         @endif
 
-    @elseif($lesson->video_provider === 'hls' || $lesson->video_provider === 'direct')
+    @elseif($videoSrc && !$useHtml5)
+        {{-- ── Iframe player (YouTube / Vimeo) ── --}}
+        {{-- Overlay to block right-click / drag-to-save on the iframe --}}
+        <div style="position:absolute;inset:0;z-index:1;" @contextmenu.prevent></div>
+        <iframe
+            class="w-full h-full"
+            src="{{ $videoSrc }}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="position:relative;z-index:0;"
+        ></iframe>
 
-        <video
-            x-ref="videoElement"
-            controls
-            class="w-full h-full object-contain"
-            @if($lesson->video_provider === 'hls')
-                data-hls-url="{{ $videoUrl }}"
-            @else
-                src="{{ $videoUrl }}"
-            @endif
-        ></video>
-
-        @if($lesson->video_provider === 'hls')
-            <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        @if($isEnrolled)
+            <div x-show="!completed" style="position:absolute;bottom:16px;right:16px;z-index:10;">
+                <button
+                    @click="markComplete"
+                    style="background:#2563eb;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;">
+                    ✓ Mark as Complete
+                </button>
+            </div>
         @endif
 
     @else
-        <div class="flex items-center justify-center h-full text-gray-400 text-sm">
+        <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:14px;">
             No video available for this lesson.
         </div>
     @endif
@@ -95,10 +131,10 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('videoPlayer', (config) => ({
             progressUrl: config.progressUrl,
-            csrfToken: config.csrfToken,
-            isEnrolled: config.isEnrolled,
-            completed: false,
-            lastSentProgress: 0,
+            csrfToken:   config.csrfToken,
+            isEnrolled:  config.isEnrolled,
+            completed:   false,
+            lastSent:    0,
 
             init() {
                 const video = this.$refs.videoElement;
@@ -115,7 +151,7 @@
                     }
                 }
 
-                // Progress tracking (only for direct/hls — iframe can't be tracked)
+                // Progress tracking
                 if (this.isEnrolled) {
                     video.addEventListener('timeupdate', this.debounce(() => {
                         if (!video.duration || this.completed) return;
@@ -123,9 +159,9 @@
                         if (pct >= 80) {
                             this.sendProgress(100);
                             this.completed = true;
-                        } else if (pct > this.lastSentProgress + 10) {
+                        } else if (pct > this.lastSent + 10) {
                             this.sendProgress(pct);
-                            this.lastSentProgress = pct;
+                            this.lastSent = pct;
                         }
                     }, 2000));
                 }
@@ -146,7 +182,7 @@
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({ progress: value })
-                }).catch(err => console.error('Progress error:', err));
+                }).catch(console.error);
             },
 
             debounce(fn, ms) {

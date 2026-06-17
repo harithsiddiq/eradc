@@ -82,6 +82,7 @@ Route::middleware(TrackVisits::class)->group(function () {
     })->name('curse');
 
     Route::get('/learn/{course:slug}/{lesson:slug}', [\App\Http\Controllers\LessonController::class, 'show'])->name('lesson.show');
+    Route::get('/learn/{course:slug}/{lesson:slug}/video', [\App\Http\Controllers\LessonController::class, 'stream'])->name('lesson.stream');
 });
 
 Route::middleware('auth')->group(function () {
