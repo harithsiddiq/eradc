@@ -23,7 +23,38 @@ class CourseResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('slug')
+                    ->required()
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('title.en')
+                    ->label('Title (English)')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('title.ar')
+                    ->label('Title (Arabic)')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('description.en')
+                    ->label('Description (English)')
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('description.ar')
+                    ->label('Description (Arabic)')
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
+                Forms\Components\FileUpload::make('thumbnail')
+                    ->image()
+                    ->directory('courses')
+                    ->columnSpanFull(),
+                Forms\Components\Toggle::make('is_published')
+                    ->label('Published')
+                    ->default(false),
+                Forms\Components\TextInput::make('order')
+                    ->numeric()
+                    ->default(0),
             ]);
     }
 
@@ -31,7 +62,27 @@ class CourseResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('title.en')
+                    ->label('Title')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('is_published')
+                    ->label('Published')
+                    ->boolean()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('order')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
