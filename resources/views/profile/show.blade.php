@@ -377,6 +377,15 @@
             window.addEventListener('DOMContentLoaded', () => {
                 switchTab('settings', document.querySelectorAll('.profile-tab')[1]);
             });
+        @else
+            window.addEventListener('DOMContentLoaded', () => {
+                const hash = window.location.hash;
+                if (hash === '#settings') {
+                    switchTab('settings', document.querySelectorAll('.profile-tab')[1]);
+                } else if (hash === '#courses') {
+                    switchTab('courses', document.querySelectorAll('.profile-tab')[0]);
+                }
+            });
         @endif
     </script>
 

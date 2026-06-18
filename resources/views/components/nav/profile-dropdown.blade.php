@@ -43,10 +43,10 @@
       </div>
     </div>
     <div class="space-y-1">
-      <a href="#" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
+      <a href="{{ route('profile.show') }}#settings" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
         {{ __('nav.profile') }}
       </a>
-      <a href="#" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
+      <a href="{{ route('profile.show') }}#courses" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
         {{ __('nav.my_courses') }}
       </a>
       <form action="{{ route('logout') }}" method="POST">
@@ -80,10 +80,10 @@
       </div>
 
       <div class="py-1 divide-item">
-        <a href="#" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
+        <a href="{{ route('profile.show') }}#settings" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
           {{ __('nav.profile') }}
         </a>
-        <a href="#" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
+        <a href="{{ route('profile.show') }}#courses" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
           {{ __('nav.my_courses') }}
         </a>
       </div>
