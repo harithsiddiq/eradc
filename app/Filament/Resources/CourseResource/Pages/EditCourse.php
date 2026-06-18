@@ -22,6 +22,7 @@ class EditCourse extends EditRecord
     {
         return [
             LessonsRelationManager::class,
+            \App\Filament\Resources\CourseResource\RelationManagers\EnrollmentsRelationManager::class,
         ];
     }
 }
