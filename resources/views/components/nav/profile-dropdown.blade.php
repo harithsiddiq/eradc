@@ -43,12 +43,18 @@
       </div>
     </div>
     <div class="space-y-1">
-      <a href="{{ route('profile.show') }}#settings" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
-        {{ __('nav.profile') }}
-      </a>
-      <a href="{{ route('profile.show') }}#courses" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
-        {{ __('nav.my_courses') }}
-      </a>
+      @if(auth()->user()->type === 'admin')
+        <a href="{{ route('filament.admin.pages.dashboard') }}" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
+          {{ __('nav.dashboard') }}
+        </a>
+      @else
+        <a href="{{ route('profile.show') }}#settings" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
+          {{ __('nav.profile') }}
+        </a>
+        <a href="{{ route('profile.show') }}#courses" class="block px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700">
+          {{ __('nav.my_courses') }}
+        </a>
+      @endif
       <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit" class="w-full text-start px-3 py-2 rounded-md text-red-600 hover:bg-red-50">
@@ -80,12 +86,18 @@
       </div>
 
       <div class="py-1 divide-item">
-        <a href="{{ route('profile.show') }}#settings" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
-          {{ __('nav.profile') }}
-        </a>
-        <a href="{{ route('profile.show') }}#courses" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
-          {{ __('nav.my_courses') }}
-        </a>
+        @if(auth()->user()->type === 'admin')
+          <a href="{{ route('filament.admin.pages.dashboard') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
+            {{ __('nav.dashboard') }}
+          </a>
+        @else
+          <a href="{{ route('profile.show') }}#settings" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
+            {{ __('nav.profile') }}
+          </a>
+          <a href="{{ route('profile.show') }}#courses" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
+            {{ __('nav.my_courses') }}
+          </a>
+        @endif
       </div>
 
       <div class="py-1 divide-item">

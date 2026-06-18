@@ -19,6 +19,21 @@ class CourseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getModelLabel(): string
+    {
+        return __('admin.course');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('admin.courses');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('admin.courses');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -28,30 +43,30 @@ class CourseResource extends Resource
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('title.en')
-                    ->label('Title (English)')
+                    ->label(fn () => __('admin.course.title_en'))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('title.ar')
-                    ->label('Title (Arabic)')
+                    ->label(fn () => __('admin.course.title_ar'))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description.en')
-                    ->label('Description (English)')
+                    ->label(fn () => __('admin.course.desc_en'))
                     ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('description.ar')
-                    ->label('Description (Arabic)')
+                    ->label(fn () => __('admin.course.desc_ar'))
                     ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('thumbnail_path')
-                    ->label('Thumbnail')
+                    ->label(fn () => __('admin.course.thumbnail'))
                     ->image()
                     ->directory('courses')
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_published')
-                    ->label('Published')
+                    ->label(fn () => __('admin.course.published'))
                     ->default(false),
                 Forms\Components\TextInput::make('order')
                     ->numeric()
@@ -64,13 +79,13 @@ class CourseResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title.en')
-                    ->label('Title')
+                    ->label(fn () => __('admin.course.title'))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_published')
-                    ->label('Published')
+                    ->label(fn () => __('admin.course.published'))
                     ->boolean()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('order')
