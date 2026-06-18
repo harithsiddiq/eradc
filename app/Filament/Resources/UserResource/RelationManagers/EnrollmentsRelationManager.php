@@ -16,7 +16,7 @@ class EnrollmentsRelationManager extends RelationManager
     protected static ?string $title = 'Enrolled Courses';
 
     // Allow create/edit/delete even on the View page (not just Edit page)
-    protected function isReadOnly(): bool
+    public function isReadOnly(): bool
     {
         return false;
     }
