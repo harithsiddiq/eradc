@@ -89,5 +89,18 @@
   "lesson.toggle_sidebar": "محتوى الدورة",
   "lesson.description": "الوصف",
   "lesson.lessons_count": "دروس",
-  "lesson.preview": "مجاني"
+  "lesson.preview": "مجاني",
+  "profile.no_courses_title": "لا توجد دورات حتى الآن",
+  "profile.no_courses_text": "أنت لست مسجلاً في أي دورات بعد. تصفح دوراتنا المتاحة للبدء.",
+  "profile.browse_courses": "تصفح الدورات",
+  "profile.change_password": "تغيير كلمة المرور",
+  "profile.current_password": "كلمة المرور الحالية",
+  "profile.new_password": "كلمة المرور الجديدة",
+  "profile.confirm_password": "تأكيد كلمة المرور الجديدة",
+  "profile.update_password": "تحديث كلمة المرور",
+  "profile.completed": "مكتمل",
+  "profile.progress": "نسبة الإنجاز",
+  "profile.watch_again": "مشاهدة مرة أخرى",
+  "profile.continue_learning": "متابعة التعلم",
+  "profile.start_course": "بدء الدورة"
 }
