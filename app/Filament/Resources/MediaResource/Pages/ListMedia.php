@@ -10,6 +10,7 @@ use Filament\Resources\Pages\ListRecords\Concerns\Translatable as ListTranslatab
 class ListMedia extends ListRecords
 {
     use ListTranslatable;
+
     protected static string $resource = MediaResource::class;
 
     protected function getHeaderActions(): array

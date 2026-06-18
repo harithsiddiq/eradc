@@ -10,6 +10,7 @@ use Filament\Resources\Pages\CreateRecord\Concerns\Translatable as CreateTransla
 class CreateCategory extends CreateRecord
 {
     use CreateTranslatable;
+
     protected static string $resource = CategoryResource::class;
 
     protected function getHeaderActions(): array

@@ -10,6 +10,7 @@ use Filament\Resources\Pages\EditRecord\Concerns\Translatable as EditTranslatabl
 class EditMedia extends EditRecord
 {
     use EditTranslatable;
+
     protected static string $resource = MediaResource::class;
 
     protected function getHeaderActions(): array

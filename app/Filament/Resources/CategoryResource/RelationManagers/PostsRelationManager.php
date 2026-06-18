@@ -2,29 +2,26 @@
 
 namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
-use App\Models\Media;
 use App\Filament\Resources\PostResource;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Hidden;
+use App\Models\Media;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TextInput as FormsTextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TextInput as FormsTextInput;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\Concerns\Translatable as RelationTranslatable;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Actions;
-use Illuminate\Support\Str;
-use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Storage;
-use App\Models\PostMeta;
+use Illuminate\Support\Str;
 
 class PostsRelationManager extends RelationManager
 {
@@ -84,7 +81,7 @@ class PostsRelationManager extends RelationManager
                                 ->disk('public')
                                 ->directory('posts/featured')
                                 ->visibility('public')
-                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) \Illuminate\Support\Str::uuid() . '.' . $file->getClientOriginalExtension())
+                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) Str::uuid().'.'.$file->getClientOriginalExtension())
                                 ->default(fn ($record) => $record?->featured_image_path),
                             FileUpload::make('gallery')
                                 ->label('صور إضافية')
@@ -95,10 +92,12 @@ class PostsRelationManager extends RelationManager
                                 ->disk('public')
                                 ->directory('posts/gallery')
                                 ->visibility('public')
-                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) \Illuminate\Support\Str::uuid() . '.' . $file->getClientOriginalExtension())
+                                ->getUploadedFileNameForStorageUsing(fn ($file) => (string) Str::uuid().'.'.$file->getClientOriginalExtension())
                                 ->default(function ($record) {
-                                    if (!$record || !is_array($record->additional_images))
+                                    if (! $record || ! is_array($record->additional_images)) {
                                         return [];
+                                    }
+
                                     return Media::whereIn('id', $record->additional_images)->pluck('file_path')->toArray();
                                 })
                                 ->columnSpanFull(),
@@ -156,7 +155,8 @@ class PostsRelationManager extends RelationManager
                     ->url(function (): string {
                         $categoryId = $this->getOwnerRecord()->getKey();
                         $base = PostResource::getUrl('create');
-                        return $categoryId ? ($base . '?category_id=' . $categoryId) : $base;
+
+                        return $categoryId ? ($base.'?category_id='.$categoryId) : $base;
                     }),
             ])
             ->actions([
@@ -195,15 +195,23 @@ class PostsRelationManager extends RelationManager
     protected function findOrCreateMediaIdByPath(string $path): int
     {
         $existing = Media::where('file_path', $path)->first();
+
         return $existing ? (int) $existing->getKey() : $this->createMediaFromPath($path);
     }
 
     protected function normalizePublicPath(string $path): string
     {
         $path = trim($path ?? '');
-        if ($path === '') return $path;
-        if (str_starts_with($path, '/storage/')) return substr($path, 9);
-        if (str_starts_with($path, 'storage/')) return substr($path, 8);
+        if ($path === '') {
+            return $path;
+        }
+        if (str_starts_with($path, '/storage/')) {
+            return substr($path, 9);
+        }
+        if (str_starts_with($path, 'storage/')) {
+            return substr($path, 8);
+        }
+
         return $path;
     }
 }

@@ -59,17 +59,7 @@
           <a href="{{ route('lang.switch', 'en') }}"
             class="px-3 py-2 text-sm font-semibold {{ app()->getLocale() === 'en' ? 'bg-primary-blue text-white' : 'text-gray-900 hover:bg-slate-50' }}">EN</a>
         </div>
-        @guest
-          <a href="{{ route('login') }}"
-            class="hidden sm:inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50">{{ __('navbar.login') }}</a>
-          <a href="{{ route('register') }}"
-            class="hidden sm:inline-flex items-center px-3 py-2 rounded-lg bg-primary-blue text-white font-semibold hover:opacity-90">{{ __('navbar.register') }}</a>
-        @else
-          <form action="{{ route('logout') }}" method="POST" class="hidden sm:inline-flex">
-            @csrf
-            <button type="submit" class="px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50">Logout</button>
-          </form>
-        @endguest
+        <x-nav.auth-area :mobile="false" />
         @auth
           {{-- <a href="#contact"
             class="hidden sm:inline-flex items-center px-4 py-2 rounded-lg bg-primary-blue text-white font-semibold shadow-glow hover:opacity-90 transition">Get
@@ -107,14 +97,7 @@
       @endforeach
     </div>
     <div class="menu-footer">
-      @guest
-        <a href="{{ route('login') }}" class="login-btn" aria-label="Login">{{ __('navbar.login') }}</a>
-      @else
-        <form action="{{ route('logout') }}" method="POST">
-          @csrf
-          <button class="login-btn" aria-label="Logout">تسجيل الخروج</button>
-        </form>
-      @endguest
+      <x-nav.auth-area :mobile="true" />
       <div class="social">
         <a href="#" aria-label="Facebook"><i class="fi fi-brands-facebook"></i></a>
         <a href="#" aria-label="Twitter"><i class="fi fi-brands-twitter-alt"></i></a>

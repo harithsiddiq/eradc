@@ -3,19 +3,20 @@
 namespace App\Filament\Resources\PostResource\Pages;
 
 use App\Filament\Resources\PostResource;
+use App\Models\Media;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Pages\EditRecord\Concerns\Translatable as EditTranslatable;
-use App\Models\Media;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 
 class EditPost extends EditRecord
 {
     use EditTranslatable {
         EditTranslatable::updatedActiveLocale as traitUpdatedActiveLocale;
     }
+
     protected static string $resource = PostResource::class;
 
     protected function getHeaderActions(): array
@@ -44,6 +45,7 @@ class EditPost extends EditRecord
         // featured_image_path is directly bound to the FileUpload field
 
         unset($data['gallery']);
+
         return $data;
     }
 
@@ -72,7 +74,9 @@ class EditPost extends EditRecord
             foreach ($metaItems as $i => $item) {
                 $key = $item['meta_key'] ?? null;
                 $val = $item['meta_value'] ?? null;
-                if (!$key) continue;
+                if (! $key) {
+                    continue;
+                }
                 $meta = $existingMetas->get($i) ?? $this->record->meta()->make();
                 $meta->post_id = $this->record->getKey();
                 $meta->setTranslation('meta_key', $locale, $item['meta_key']);
@@ -100,6 +104,7 @@ class EditPost extends EditRecord
                 'meta_value' => $m->getTranslation('meta_value', $locale, false) ?? '',
             ];
         })->toArray();
+
         return $data;
     }
 
@@ -125,15 +130,23 @@ class EditPost extends EditRecord
     protected function findOrCreateMediaIdByPath(string $path): int
     {
         $existing = Media::where('file_path', $path)->first();
+
         return $existing ? (int) $existing->getKey() : $this->createMediaFromPath($path);
     }
 
     protected function normalizePublicPath(string $path): string
     {
         $path = trim($path ?? '');
-        if ($path === '') return $path;
-        if (str_starts_with($path, '/storage/')) return substr($path, 9);
-        if (str_starts_with($path, 'storage/')) return substr($path, 8);
+        if ($path === '') {
+            return $path;
+        }
+        if (str_starts_with($path, '/storage/')) {
+            return substr($path, 9);
+        }
+        if (str_starts_with($path, 'storage/')) {
+            return substr($path, 8);
+        }
+
         return $path;
     }
 }

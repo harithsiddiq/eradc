@@ -5,25 +5,26 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
-use Filament\Resources\Concerns\Translatable;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Form;
+use Filament\Resources\Concerns\Translatable;
+use Filament\Resources\Resource;
 // use Filament\Tables\Columns\DragHandle;
 
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
     use Translatable;
+
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
@@ -50,7 +51,7 @@ class CategoryResource extends Resource
                     ->label('اسم القسم')
                     ->options(function () {
                         $dir = resource_path('views/components');
-                        $files = glob($dir . '/*.blade.php');
+                        $files = glob($dir.'/*.blade.php');
                         $options = [];
                         foreach ($files as $file) {
                             $name = basename($file, '.blade.php');
@@ -59,6 +60,7 @@ class CategoryResource extends Resource
                             }
                             $options[$name] = Str::title(Str::replace(['-', '_'], ' ', $name));
                         }
+
                         return $options;
                     })
                     ->searchable()

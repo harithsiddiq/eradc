@@ -2,7 +2,8 @@
 
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
-return new class extends SettingsMigration {
+return new class extends SettingsMigration
+{
     public function up(): void
     {
         $this->migrator->add('footer.contact_title', 'اتصل بنا');
@@ -23,4 +24,3 @@ return new class extends SettingsMigration {
         $this->migrator->delete('footer.contact_cta_tel');
     }
 };
-

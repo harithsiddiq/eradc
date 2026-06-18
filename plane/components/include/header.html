@@ -1,0 +1,70 @@
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="flex items-center gap-2">
+        <img src="assets/logo.svg" alt="" width="100" class="block mx-auto lg:mx-0">
+      </a>
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+          <a href="#"  target="_blank" rel="noopener" 
+            class="hover:text-cyan-accent whitespace-nowrap px-2">Menu Item</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:inline-flex items-center rounded-lg border border-slate-200 overflow-hidden">
+          <a href="#"
+            class="px-3 py-2 text-sm font-semibold">AR</a>
+          <a href="#"
+            class="px-3 py-2 text-sm font-semibold">EN</a>
+        </div>
+          <a href="#"
+            class="hidden sm:inline-flex items-center px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50">Navbar Login</a>
+          <a href="#"
+            class="hidden sm:inline-flex items-center px-3 py-2 rounded-lg bg-primary-blue text-white font-semibold hover:opacity-90">Navbar Register</a>
+          <form action="#" method="POST" class="hidden sm:inline-flex">
+            <button type="submit" class="px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50">Logout</button>
+          </form>
+        <button id="mobileMenuToggle"
+          class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 hover:bg-slate-50"
+          aria-label="Toggle menu">
+          <i class="fi fi-rr-menu-burger w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="md:hidden">
+    <div class="menu-header">
+      <img src="assets/logo.svg" alt="EradcHub" class="h-8 w-auto" />
+      <button id="mobileMenuClose"
+        class="inline-flex items-center justify-center w-12 h-12 rounded-lg text-white hover:text-white/80"
+        aria-label="Close menu">
+        <i class="fi fi-rr-cross-small w-6 h-6"></i>
+      </button>
+    </div>
+    <div class="menu-content px-4 py-3 space-y-2">
+        <a href="#"  target="_blank" rel="noopener" >
+          <div class="flex items-center justify-between">
+            <span>Menu Item</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+              <path
+                d="M9.47 4.47a.75.75 0 0 1 1.06 0l7 7a.75.75 0 0 1 0 1.06l-7 7a.75.75 0 1 1-1.06-1.06L15.94 12 9.47 5.53a.75.75 0 0 1 0-1.06Z" />
+            </svg>
+          </div>
+        </a>
+    </div>
+    <div class="menu-footer">
+        <a href="#" class="login-btn" aria-label="Login">Navbar Login</a>
+        <form action="#" method="POST">
+          <button class="login-btn" aria-label="Logout">تسجيل الخروج</button>
+        </form>
+      <div class="social">
+        <a href="#" aria-label="Facebook"><i class="fi fi-brands-facebook"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fi fi-brands-twitter-alt"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fi fi-brands-instagram"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fi fi-brands-linkedin"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fi fi-brands-tik-tok"></i></a>
+      </div>
+      <div class="copy">منصة مركز البيانات العصري | EradcHub 2025</div>
+    </div>
+  </div>
+</header>

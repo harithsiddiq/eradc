@@ -3,11 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\EnrollmentsRelationManager;
 use App\Models\User;
 use Filament\Forms\Form;
-use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -115,7 +116,9 @@ class UserResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            EnrollmentsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

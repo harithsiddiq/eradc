@@ -2,7 +2,8 @@
 
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
-return new class extends SettingsMigration {
+return new class extends SettingsMigration
+{
     public function up(): void
     {
         $this->migrator->update('footer.brand_name', fn ($value) => ['ar' => 'أكاديمية EradcHub', 'en' => 'EradcHub Academy']);

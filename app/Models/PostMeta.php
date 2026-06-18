@@ -8,7 +8,7 @@ use Spatie\Translatable\HasTranslations;
 
 class PostMeta extends Model
 {
-    use HasFactory, HasTranslations;   
+    use HasFactory, HasTranslations;
 
     protected $table = 'post_meta';
 

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
@@ -29,7 +30,16 @@ class AuthController extends Controller
         $remember = (bool) $request->boolean('remember');
 
         if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+
+            if (! $user->is_active) {
+                $request->session()->regenerate();
+
+                return redirect()->route('verification.notice');
+            }
+
             $request->session()->regenerate();
+
             return redirect()->intended('/');
         }
 
@@ -64,7 +74,9 @@ class AuthController extends Controller
         ]);
 
         $ip = $request->ip();
-        $country = null; $region = null; $city = null;
+        $country = null;
+        $region = null;
+        $city = null;
         try {
             $resp = Http::timeout(3)->get("https://ipapi.co/{$ip}/json/");
             if ($resp->ok()) {
@@ -73,23 +85,28 @@ class AuthController extends Controller
                 $country = $json['country_name'] ?? null;
                 $region = $json['region'] ?? null;
                 $city = $json['city'] ?? null;
-            } 
+            }
         } catch (\Throwable $e) {
         }
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'type' => 'user',
-            'level' => $data['level'],
-            'signup_ip' => $ip,
-            'signup_country' => $country,
-            'signup_region' => $region,
-            'signup_city' => $city,
-        ]);
+        $user = DB::transaction(function () use ($data, $ip, $country, $region, $city) {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+                'type' => 'user',
+                'level' => $data['level'],
+                'is_active' => false,
+                'signup_ip' => $ip,
+                'signup_country' => $country,
+                'signup_region' => $region,
+                'signup_city' => $city,
+            ]);
 
-        event(new \Illuminate\Auth\Events\Registered($user));
+            event(new Registered($user));
+
+            return $user;
+        });
 
         Auth::login($user);
 

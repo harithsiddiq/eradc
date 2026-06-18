@@ -14,8 +14,10 @@
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
+      [x-cloak] { display: none !important; }
       section#mission-vision, section#core-values, section#strategic-partners, section#services, section#contact, section#courses, section#image-bg-section، section#trainers { display: block !important; }
 
       /* Services Accordion RTL styles */
@@ -373,6 +375,7 @@
       #mobileMenu .menu-footer .login-btn { text-align: center; margin-bottom: 0.75rem; }
 
     </style>
+    @stack('head')
   </head>
   <body class="bg-white text-neutral-dark antialiased overflow-x-hidden min-h-screen">
         <x-include.header />

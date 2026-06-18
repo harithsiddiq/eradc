@@ -3,25 +3,24 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TagResource\Pages;
-use App\Filament\Resources\TagResource\RelationManagers;
 use App\Models\Tag;
-use Filament\Resources\Concerns\Translatable;
-use Filament\Forms;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Str;
-
 
 class TagResource extends Resource
 {
     use Translatable;
+
     protected static ?string $model = Tag::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
+
     protected static bool $shouldRegisterNavigation = false;
 
     public static function getNavigationLabel(): string

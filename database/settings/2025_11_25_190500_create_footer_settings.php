@@ -2,7 +2,8 @@
 
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
-return new class extends SettingsMigration {
+return new class extends SettingsMigration
+{
     public function up(): void
     {
         $this->migrator->add('footer.brand_name', 'أكاديمية EradcHub');
@@ -33,4 +34,3 @@ return new class extends SettingsMigration {
         $this->migrator->delete('footer.policies');
     }
 };
-

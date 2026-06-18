@@ -11,7 +11,6 @@ class Post extends Model
     use HasFactory;
     use HasTranslations;
 
-
     protected $fillable = [
         'title',
         'slug',
@@ -74,5 +73,4 @@ class Post extends Model
         return $this->belongsToMany(Media::class, 'media_relations', 'post_id', 'media_id')
             ->withPivot(['relation_type', 'position', 'meta', 'created_at']);
     }
-
 }

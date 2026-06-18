@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Post;
 use App\Models\PostMeta;
-use App\Models\Media;
-use Database\Seeders\MenuSeeder;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -58,17 +57,19 @@ class DatabaseSeeder extends Seeder
                 $post->save();
 
                 // Normalize additional_images to media IDs if strings provided
-                if (!empty($p['additional_images']) && is_array($p['additional_images'])) {
+                if (! empty($p['additional_images']) && is_array($p['additional_images'])) {
                     $ids = [];
                     foreach ($p['additional_images'] as $item) {
                         if (is_numeric($item)) {
                             $ids[] = (int) $item;
                         } elseif (is_string($item)) {
                             $m = Media::where('file_path', $item)->orWhere('file_name', $item)->first();
-                            if ($m) { $ids[] = $m->getKey(); }
+                            if ($m) {
+                                $ids[] = $m->getKey();
+                            }
                         }
                     }
-                    if (!empty($ids)) {
+                    if (! empty($ids)) {
                         $post->additional_images = $ids;
                         $post->save();
                     }
@@ -94,7 +95,9 @@ class DatabaseSeeder extends Seeder
         if (is_array($metaItems)) {
             foreach ($metaItems as $item) {
                 $post = isset($item['post_slug']) ? Post::where('slug', $item['post_slug'])->first() : null;
-                if (!$post) { continue; }
+                if (! $post) {
+                    continue;
+                }
                 $meta = PostMeta::firstOrNew([
                     'post_id' => $post->getKey(),
                     'meta_key' => $item['meta_key'] ?? null,

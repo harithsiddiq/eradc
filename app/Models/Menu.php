@@ -69,7 +69,7 @@ class Menu extends Model
             return route('posts.index');
         }
 
-        return route('home') . '/#' . $anchor;
+        return route('home').'/#'.$anchor;
     }
 
     protected function resolveSectionUrl(): string
@@ -80,6 +80,6 @@ class Menu extends Model
             $slug = $this->category->slug;
         }
 
-        return $slug ? route('home') . '/#' . ltrim($slug, '#') : route('home');
+        return $slug ? route('home').'/#'.ltrim($slug, '#') : route('home');
     }
 }
