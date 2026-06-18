@@ -110,8 +110,10 @@ Route::middleware('auth')->group(function () {
         return back()->with('status', 'verification-link-sent');
     })->middleware(['throttle:6,1'])->name('verification.send');
 
-    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::middleware('verified')->group(function () {
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+        Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+    });
 
     Route::post('/learn/{course:slug}/{lesson:slug}/progress', [\App\Http\Controllers\LessonController::class, 'updateProgress'])->name('lesson.progress');
 
