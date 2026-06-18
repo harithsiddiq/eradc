@@ -253,10 +253,10 @@
             {{-- ── Tabs ── --}}
             <div class="profile-tabs">
                 <button class="profile-tab active" onclick="switchTab('courses', this)">
-                    📚 My Courses ({{ $enrollments->count() }})
+                    📚 {{ __('nav.my_courses') }} ({{ $enrollments->count() }})
                 </button>
                 <button class="profile-tab" onclick="switchTab('settings', this)">
-                    ⚙️ Settings
+                    ⚙️ {{ __('settings.navigation') }}
                 </button>
             </div>
 
@@ -265,9 +265,9 @@
                 @if($enrollments->isEmpty())
                     <div class="empty-state">
                         <div class="empty-state__icon">🎓</div>
-                        <h3 class="empty-state__title">No courses yet</h3>
-                        <p class="empty-state__text">You are not enrolled in any courses yet. Browse our available courses to get started.</p>
-                        <a href="{{ route('curses') }}" class="empty-state__btn">Browse Courses</a>
+                        <h3 class="empty-state__title">{{ __('profile.no_courses_title') }}</h3>
+                        <p class="empty-state__text">{{ __('profile.no_courses_text') }}</p>
+                        <a href="{{ route('curses') }}" class="empty-state__btn">{{ __('profile.browse_courses') }}</a>
                     </div>
                 @else
                     <div class="courses-grid">
@@ -295,12 +295,12 @@
 
                                 <div class="course-card__body">
                                     <h3 class="course-card__title">{{ $course->title }}</h3>
-                                    <p class="course-card__meta">{{ $totalLessons }} lessons · Enrolled {{ $enrollment->created_at->diffForHumans() }}</p>
+                                    <p class="course-card__meta">{{ $totalLessons }} {{ __('profile.lessons') }} · {{ __('profile.enrolled') }} {{ $enrollment->created_at->diffForHumans() }}</p>
 
                                     {{-- Progress --}}
                                     <div class="progress-wrap">
                                         <div class="progress-label">
-                                            <span>{{ $isDone ? '✅ Completed' : 'Progress' }}</span>
+                                            <span>{{ $isDone ? '✅ ' . __('profile.completed') : __('profile.progress') }}</span>
                                             <span>{{ $progress }}%</span>
                                         </div>
                                         <div class="progress-bar">
@@ -313,7 +313,7 @@
                                     @if($nextLesson)
                                         <a href="{{ route('lesson.show', ['course' => $course->slug, 'lesson' => $nextLesson->slug]) }}"
                                            class="course-card__btn {{ $isDone ? 'course-card__btn--done' : '' }}">
-                                            {{ $isDone ? '🔁 Watch Again' : ($progress > 0 ? '▶ Continue Learning' : '▶ Start Course') }}
+                                            {{ $isDone ? '🔁 ' . __('profile.watch_again') : ($progress > 0 ? '▶ ' . __('profile.continue_learning') : '▶ ' . __('profile.start_course')) }}
                                         </a>
                                     @endif
                                 </div>
@@ -326,7 +326,7 @@
             {{-- ── Settings Tab ── --}}
             <div id="tab-settings" class="tab-panel">
                 <div class="settings-card">
-                    <h2>🔒 Change Password</h2>
+                    <h2>🔒 {{ __('profile.change_password') }}</h2>
 
                     @if(session('success'))
                         <div class="alert-success">{{ session('success') }}</div>
@@ -345,18 +345,18 @@
                         @method('PUT')
 
                         <div class="form-group">
-                            <label class="form-label">Current Password</label>
+                            <label class="form-label">{{ __('profile.current_password') }}</label>
                             <input type="password" name="current_password" class="form-input" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">New Password</label>
+                            <label class="form-label">{{ __('profile.new_password') }}</label>
                             <input type="password" name="password" class="form-input" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Confirm New Password</label>
+                            <label class="form-label">{{ __('profile.confirm_password') }}</label>
                             <input type="password" name="password_confirmation" class="form-input" required>
                         </div>
-                        <button type="submit" class="form-btn">Update Password</button>
+                        <button type="submit" class="form-btn">{{ __('profile.update_password') }}</button>
                     </form>
                 </div>
             </div>

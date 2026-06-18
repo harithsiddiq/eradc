@@ -89,5 +89,18 @@
   "lesson.toggle_sidebar": "Course Content",
   "lesson.description": "Description",
   "lesson.lessons_count": "lessons",
-  "lesson.preview": "Free"
+  "lesson.preview": "Free",
+  "profile.no_courses_title": "No courses yet",
+  "profile.no_courses_text": "You are not enrolled in any courses yet. Browse our available courses to get started.",
+  "profile.browse_courses": "Browse Courses",
+  "profile.change_password": "Change Password",
+  "profile.current_password": "Current Password",
+  "profile.new_password": "New Password",
+  "profile.confirm_password": "Confirm New Password",
+  "profile.update_password": "Update Password",
+  "profile.completed": "Completed",
+  "profile.progress": "Progress",
+  "profile.watch_again": "Watch Again",
+  "profile.continue_learning": "Continue Learning",
+  "profile.start_course": "Start Course"
 }
