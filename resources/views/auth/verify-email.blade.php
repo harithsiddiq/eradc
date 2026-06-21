@@ -34,7 +34,7 @@
         </form>
 
         <div class="mt-6 text-sm text-slate-500">
-          <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="text-slate-600 hover:text-primary-blue">
+          <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-slate-600 hover:text-primary-blue">
             {{ __('auth.verify.logout') }}
           </a>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">

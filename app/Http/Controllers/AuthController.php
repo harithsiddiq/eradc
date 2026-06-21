@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -103,7 +105,11 @@ class AuthController extends Controller
                 'signup_city' => $city,
             ]);
 
+            // Dispatch email verification (via MustVerifyEmail / Registered event)
             event(new Registered($user));
+
+            // Dispatch welcome email (queued)
+            Mail::to($user->email)->queue(new WelcomeEmail($user));
 
             return $user;
         });
