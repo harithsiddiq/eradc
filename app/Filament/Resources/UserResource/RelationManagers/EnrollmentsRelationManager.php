@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use App\Mail\EnrollmentConfirmationEmail;
 use App\Models\Course;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Mail;
 
 class EnrollmentsRelationManager extends RelationManager
 {
@@ -86,7 +88,19 @@ class EnrollmentsRelationManager extends RelationManager
                     ->sortable(),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()->label('Assign Course'),
+                Tables\Actions\CreateAction::make()
+                    ->label('Assign Course')
+                    ->afterCreate(function ($record) {
+                        // Send enrollment confirmation email to user (queued)
+                        $user   = $this->getOwnerRecord();
+                        $course = Course::find($record->course_id);
+
+                        if ($user && $course) {
+                            Mail::to($user->email)->queue(
+                                new EnrollmentConfirmationEmail($user, $course)
+                            );
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

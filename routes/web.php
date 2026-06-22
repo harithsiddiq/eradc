@@ -26,6 +26,11 @@ Route::middleware(TrackVisits::class)->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
         Route::post('/register', [AuthController::class, 'register']);
+
+        Route::get('/forgot-password', [\App\Http\Controllers\PasswordResetController::class, 'create'])->name('password.request');
+        Route::post('/forgot-password', [\App\Http\Controllers\PasswordResetController::class, 'store'])->name('password.email');
+        Route::get('/reset-password/{token}', [\App\Http\Controllers\PasswordResetController::class, 'edit'])->name('password.reset');
+        Route::post('/reset-password', [\App\Http\Controllers\PasswordResetController::class, 'update'])->name('password.update');
     });
 
     Route::get('/test', function () {

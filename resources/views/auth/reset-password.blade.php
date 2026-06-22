@@ -32,33 +32,25 @@
             <a href="{{ route('lang.switch', 'en') }}"
               class="hover:text-primary-blue {{ app()->getLocale() === 'en' ? 'font-semibold text-primary-blue' : '' }}">English</a>
           </div>
-          <h2 class="text-xl font-bold">{{ __('auth.login.title') }}</h2>
+          <h2 class="text-xl font-bold">{{ __('auth.reset.title') ?? 'Reset Password' }}</h2>
 
-          @if (session('status'))
-            <div class="mt-3 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-              {{ session('status') }}
-            </div>
-          @endif
-
-          @if ($errors->has('email') && !$errors->has('password'))
-            <div class="mt-3 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-              {{ $errors->first('email') }}
-            </div>
-          @endif
-
-          <form class="mt-4 space-y-4" action="{{ route('login') }}" method="POST">
+          <form class="mt-4 space-y-4" action="{{ route('password.update') }}" method="POST">
             @csrf
+            
+            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
             <div>
               <label class="block text-sm font-medium text-slate-700">{{ __('auth.login.email') }}</label>
-              <input name="email" value="{{ old('email') }}"
+              <input name="email" value="{{ old('email', $request->email) }}"
                 style="border: 1px solid {{ $errors->has('email') ? '#dc2626' : '#2e3192' }};" type="email"
                 placeholder="you@example.com"
                 class="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-primary-blue focus:border-primary-blue"
-                required />
+                required autofocus />
               @error('email')
                 <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
               @enderror
             </div>
+
             <div>
               <label class="block text-sm font-medium text-slate-700">{{ __('auth.login.password') }}</label>
               <input name="password" style="border: 1px solid {{ $errors->has('password') ? '#dc2626' : '#2e3192' }};"
@@ -69,15 +61,19 @@
                 <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
               @enderror
             </div>
-            <div class="flex items-center justify-between">
-              <label class="inline-flex items-center gap-2 text-sm"><input name="remember" type="checkbox"
-                  class="rounded border-slate-300"> {{ __('auth.login.remember') }}</label>
-              <a href="{{ route('password.request') }}" class="text-sm text-cyan-accent">{{ __('auth.login.forgot') }}</a>
+
+            <div>
+              <label class="block text-sm font-medium text-slate-700">{{ __('auth.reset.password_confirm') ?? 'Confirm Password' }}</label>
+              <input name="password_confirmation" style="border: 1px solid {{ $errors->has('password_confirmation') ? '#dc2626' : '#2e3192' }};"
+                type="password" placeholder="••••••••"
+                class="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-primary-blue focus:border-primary-blue"
+                required />
             </div>
-            <div class="flex items-center justify-end">
+            
+            <div class="flex items-center justify-end mt-4">
               <button type="submit"
                 class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-primary-blue text-white font-semibold hover:opacity-90"
-                style="background-color: #2e3192;">{{ __('auth.login.submit') }}</button>
+                style="background-color: #2e3192;">{{ __('auth.reset.submit') ?? 'Reset Password' }}</button>
             </div>
           </form>
         </div>

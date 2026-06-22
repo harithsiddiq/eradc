@@ -3,8 +3,17 @@
 @php
     $provider = $lesson->video_provider;
 
+    // Auto-detect Google Drive regardless of provider
+    if (str_contains($lesson->video_url ?? '', 'drive.google.com')) {
+        // Match /file/d/ID, id=ID, or open?id=ID
+        preg_match('/(?:file\/d\/|id=|open\?id=)([a-zA-Z0-9_-]+)/', $lesson->video_url ?? '', $m);
+        $videoId = $m[1] ?? null;
+        $videoSrc = $videoId ? "https://drive.google.com/file/d/{$videoId}/preview" : $lesson->video_url;
+        $useHtml5 = false;
+        $isHls    = false;
+
     // ── Resolve the correct video source ──────────────────────────
-    if ($provider === 'upload') {
+    } elseif ($provider === 'upload') {
         // Use the secure stream route — real file path is never exposed
         $videoSrc = route('lesson.stream', ['course' => $course->slug, 'lesson' => $lesson->slug]);
         $useHtml5  = true;
@@ -20,16 +29,17 @@
         $useHtml5  = true;
         $isHls     = true;
 
-    } elseif ($provider === 'youtube') {
-        preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $lesson->video_url ?? '', $m);
+    } elseif ($provider === 'youtube' || str_contains($lesson->video_url ?? '', 'youtube.com') || str_contains($lesson->video_url ?? '', 'youtu.be')) {
+        // Match standard watch URLs (even with other params), shorts, embed, and youtu.be
+        preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $lesson->video_url ?? '', $m);
         $videoId  = $m[1] ?? null;
         $videoSrc = $videoId ? "https://www.youtube.com/embed/{$videoId}?rel=0&modestbranding=1" : $lesson->video_url;
         $useHtml5  = false;
         $isHls     = false;
 
-    } elseif ($provider === 'vimeo') {
-        preg_match('/vimeo\.com\/(\d+)/', $lesson->video_url ?? '', $m);
-        $videoId  = $m[1] ?? null;
+    } elseif ($provider === 'vimeo' || str_contains($lesson->video_url ?? '', 'vimeo.com')) {
+        preg_match('/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/', $lesson->video_url ?? '', $m);
+        $videoId  = $m[3] ?? (preg_match('/vimeo\.com\/(\d+)/', $lesson->video_url ?? '', $m) ? $m[1] : null);
         $videoSrc = $videoId ? "https://player.vimeo.com/video/{$videoId}" : $lesson->video_url;
         $useHtml5  = false;
         $isHls     = false;
@@ -97,15 +107,14 @@
         @endif
 
     @elseif($videoSrc && !$useHtml5)
-        {{-- ── Iframe player (YouTube / Vimeo) ── --}}
-        {{-- Overlay to block right-click / drag-to-save on the iframe --}}
-        <div style="position:absolute;inset:0;z-index:1;" @contextmenu.prevent></div>
+        {{-- ── Iframe player (YouTube / Vimeo / Google Drive) ── --}}
         <iframe
             class="w-full h-full"
             src="{{ $videoSrc }}"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
             style="position:relative;z-index:0;"
         ></iframe>
 
