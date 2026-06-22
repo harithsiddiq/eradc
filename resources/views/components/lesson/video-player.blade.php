@@ -12,6 +12,33 @@
         $useHtml5 = false;
         $isHls    = false;
 
+    // Auto-detect OneDrive regardless of provider
+    } elseif (str_contains($lesson->video_url ?? '', 'onedrive.live.com') || str_contains($lesson->video_url ?? '', '1drv.ms')) {
+        if (str_contains($lesson->video_url, '/embed?')) {
+            $videoSrc = $lesson->video_url; // Already an embed URL
+        } else {
+            preg_match('/cid=([a-zA-Z0-9]+)/i', $lesson->video_url ?? '', $cidMatch);
+            preg_match('/(?:resid=|id=)([a-zA-Z0-9]+(?:!|%21)[a-zA-Z0-9]+)/i', $lesson->video_url ?? '', $idMatch);
+            preg_match('/authkey=([a-zA-Z0-9!_-]+)/i', $lesson->video_url ?? '', $authMatch);
+
+            $cid = $cidMatch[1] ?? null;
+            $resid = $idMatch[1] ?? null;
+            $authkey = $authMatch[1] ?? null;
+
+            if ($cid && $resid) {
+                // Decode %21 to ! if necessary for the resid
+                $resid = str_replace('%21', '!', $resid);
+                $videoSrc = "https://onedrive.live.com/embed?cid={$cid}&resid={$resid}";
+                if ($authkey) {
+                    $videoSrc .= "&authkey={$authkey}";
+                }
+            } else {
+                $videoSrc = $lesson->video_url; // Fallback
+            }
+        }
+        $useHtml5 = false;
+        $isHls    = false;
+
     // ── Resolve the correct video source ──────────────────────────
     } elseif ($provider === 'upload') {
         // Use the secure stream route — real file path is never exposed
