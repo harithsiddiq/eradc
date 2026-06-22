@@ -52,11 +52,12 @@ class LessonsRelationManager extends RelationManager
                 Forms\Components\Select::make('video_provider')
                     ->label('Video Source')
                     ->options([
-                        'upload'  => '📁 Upload Video File',
-                        'youtube' => '▶ YouTube URL',
-                        'vimeo'   => '🎬 Vimeo URL',
-                        'hls'     => '📡 HLS Stream URL',
-                        'direct'  => '🔗 Direct MP4 URL',
+                        'upload'   => '📁 Upload Video File',
+                        'youtube'  => '▶ YouTube URL',
+                        'vimeo'    => '🎬 Vimeo URL',
+                        'onedrive' => '☁️ OneDrive URL',
+                        'hls'      => '📡 HLS Stream URL',
+                        'direct'   => '🔗 Direct MP4 URL',
                     ])
                     ->required()
                     ->live() // re-render when changed
@@ -73,6 +74,26 @@ class LessonsRelationManager extends RelationManager
                     ->directory('lessons/videos')
                     ->visibility('private')
                     ->helperText(fn () => 'Max size: ' . app(CourseSettings::class)->max_video_upload_mb . ' MB. Stored privately — users cannot download it directly.')
+                    ->hintAction(
+                        Forms\Components\Actions\Action::make('chooseExisting')
+                            ->label('📂 Choose Existing Server File')
+                            ->form([
+                                Forms\Components\Select::make('existing_video')
+                                    ->label('Select from storage/app/lessons/videos')
+                                    ->options(function () {
+                                        $files = \Illuminate\Support\Facades\Storage::disk('local')->files('lessons/videos');
+                                        return collect($files)
+                                            ->filter(fn ($file) => !str_starts_with(basename($file), '.')) // Ignore hidden files
+                                            ->mapWithKeys(fn ($file) => [$file => basename($file)])
+                                            ->toArray();
+                                    })
+                                    ->searchable()
+                                    ->required(),
+                            ])
+                            ->action(function (\Filament\Forms\Set $set, array $data) {
+                                $set('video_file_path', $data['existing_video']);
+                            })
+                    )
                     ->columnSpanFull()
                     ->visible(fn (Get $get): bool => $get('video_provider') === 'upload'),
 
