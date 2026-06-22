@@ -112,5 +112,11 @@
   "profile.progress": "Progress",
   "profile.watch_again": "Watch Again",
   "profile.continue_learning": "Continue Learning",
-  "profile.start_course": "Start Course"
+  "profile.start_course": "Start Course",
+  "auth.forgot.title": "Forgot Password",
+  "auth.forgot.description": "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.",
+  "auth.forgot.submit": "Email Password Reset Link",
+  "auth.reset.title": "Reset Password",
+  "auth.reset.password_confirm": "Confirm Password",
+  "auth.reset.submit": "Reset Password"
 }

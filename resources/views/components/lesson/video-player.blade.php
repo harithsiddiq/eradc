@@ -3,8 +3,16 @@
 @php
     $provider = $lesson->video_provider;
 
+    // Auto-detect Google Drive regardless of provider
+    if (str_contains($lesson->video_url ?? '', 'drive.google.com')) {
+        preg_match('/(?:drive\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/', $lesson->video_url, $m);
+        $videoId = $m[1] ?? null;
+        $videoSrc = $videoId ? "https://drive.google.com/file/d/{$videoId}/preview" : $lesson->video_url;
+        $useHtml5 = false;
+        $isHls    = false;
+
     // ── Resolve the correct video source ──────────────────────────
-    if ($provider === 'upload') {
+    } elseif ($provider === 'upload') {
         // Use the secure stream route — real file path is never exposed
         $videoSrc = route('lesson.stream', ['course' => $course->slug, 'lesson' => $lesson->slug]);
         $useHtml5  = true;
@@ -97,9 +105,7 @@
         @endif
 
     @elseif($videoSrc && !$useHtml5)
-        {{-- ── Iframe player (YouTube / Vimeo) ── --}}
-        {{-- Overlay to block right-click / drag-to-save on the iframe --}}
-        <div style="position:absolute;inset:0;z-index:1;" @contextmenu.prevent></div>
+        {{-- ── Iframe player (YouTube / Vimeo / Google Drive) ── --}}
         <iframe
             class="w-full h-full"
             src="{{ $videoSrc }}"

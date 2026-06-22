@@ -373,7 +373,7 @@
         }
 
         // Auto-open settings tab if there are errors (password form)
-        @if($errors->any())
+        @if($errors->any() || session('success'))
             window.addEventListener('DOMContentLoaded', () => {
                 switchTab('settings', document.querySelectorAll('.profile-tab')[1]);
             });

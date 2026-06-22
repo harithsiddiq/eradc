@@ -112,5 +112,11 @@
   "profile.progress": "نسبة الإنجاز",
   "profile.watch_again": "مشاهدة مرة أخرى",
   "profile.continue_learning": "متابعة التعلم",
-  "profile.start_course": "بدء الدورة"
+  "profile.start_course": "ابدأ الدورة",
+  "auth.forgot.title": "نسيت كلمة المرور",
+  "auth.forgot.description": "هل نسيت كلمة المرور؟ لا مشكلة. فقط أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.",
+  "auth.forgot.submit": "إرسال رابط إعادة تعيين كلمة المرور",
+  "auth.reset.title": "إعادة تعيين كلمة المرور",
+  "auth.reset.password_confirm": "تأكيد كلمة المرور",
+  "auth.reset.submit": "إعادة تعيين"
 }

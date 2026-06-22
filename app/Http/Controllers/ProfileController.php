@@ -35,7 +35,7 @@ class ProfileController extends Controller
             return back()->withErrors(['current_password' => __('Current password is incorrect.')]);
         }
 
-        $user->update(['password' => Hash::make($request->password)]);
+        $user->update(['password' => $request->password]);
 
         return back()->with('success', __('Password updated successfully.'));
     }
