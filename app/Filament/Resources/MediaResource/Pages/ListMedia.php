@@ -2,22 +2,24 @@
 
 namespace App\Filament\Resources\MediaResource\Pages;
 
+use LaraZeus\SpatieTranslatable\Resources\Pages\ListRecords\Concerns\Translatable;
+use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\MediaResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Pages\ListRecords\Concerns\Translatable as ListTranslatable;
 
 class ListMedia extends ListRecords
 {
-    use ListTranslatable;
+    use Translatable;
 
     protected static string $resource = MediaResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\LocaleSwitcher::make(),
-            Actions\CreateAction::make(),
+            LocaleSwitcher::make(),
+            CreateAction::make(),
         ];
     }
 }

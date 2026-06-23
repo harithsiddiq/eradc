@@ -2,6 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\PostResource\Pages\ListPosts;
+use App\Filament\Resources\PostResource\Pages\CreatePost;
+use App\Filament\Resources\PostResource\Pages\EditPost;
 use App\Filament\Resources\PostResource\Pages;
 use App\Models\Category;
 use App\Models\Media;
@@ -15,11 +31,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextInput as FormsTextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -34,21 +45,21 @@ class PostResource extends Resource
 
     protected static array $mediaGuidelineCache = [];
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
     public static function getNavigationLabel(): string
     {
         return 'محتوى الأقسام';
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Wizard::make([
                     Step::make('التفاصيل')
                         ->schema([
-                            TextInput::make('title')
+                            FormsTextInput::make('title')
                                 ->label('العنوان')
                                 ->required()
                                 ->live(onBlur: true)
@@ -57,7 +68,7 @@ class PostResource extends Resource
                                         $set('slug', Str::slug($state));
                                     }
                                 }),
-                            TextInput::make('slug')
+                            FormsTextInput::make('slug')
                                 ->label('الرابط')
                                 ->required()
                                 ->unique(ignoreRecord: true),
@@ -120,7 +131,7 @@ class PostResource extends Resource
                         ]),
                     Step::make('محركات البحث')
                         ->schema([
-                            TextInput::make('meta_title')
+                            FormsTextInput::make('meta_title')
                                 ->label('عنوان الميتا')
                                 ->maxLength(255),
                             Textarea::make('meta_description')
@@ -186,27 +197,27 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('featured_image_path')
+                ImageColumn::make('featured_image_path')
                     ->label('الصورة')
                     ->disk('public')
                     ->square(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->label('العنوان')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('slug')
+                TextColumn::make('slug')
                     ->label('الرابط')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('author.name')
+                TextColumn::make('author.name')
                     ->label('الكاتب')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('category.name')
+                TextColumn::make('category.name')
                     ->label('الفئة')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->label('الحالة')
                     ->badge()
                     ->color(fn (string $state) => match ($state) {
@@ -215,40 +226,40 @@ class PostResource extends Resource
                         'archived' => 'warning',
                         default => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('published_at')
+                TextColumn::make('published_at')
                     ->label('وقت النشر')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('الإنشاء')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('gallery_count')
+                TextColumn::make('gallery_count')
                     ->label('عدد الصور')
                     ->getStateUsing(fn ($record) => is_array($record->additional_images) ? count($record->additional_images) : 0)
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\ToggleColumn::make('show_on_landing')
+                ToggleColumn::make('show_on_landing')
                     ->label('في الصفحة الرئيسية'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
+                SelectFilter::make('status')
                     ->label('الحالة')
                     ->options([
                         'draft' => 'مسودة',
                         'published' => 'منشور',
                         'archived' => 'مؤرشف',
                     ]),
-                Tables\Filters\Filter::make('published')
+                Filter::make('published')
                     ->label('منشور')
                     ->query(fn ($query) => $query->whereNotNull('published_at')),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -263,9 +274,9 @@ class PostResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'edit' => Pages\EditPost::route('/{record}/edit'),
+            'index' => ListPosts::route('/'),
+            'create' => CreatePost::route('/create'),
+            'edit' => EditPost::route('/{record}/edit'),
         ];
     }
 

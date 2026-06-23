@@ -2,11 +2,29 @@
 
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
+use Filament\Actions\Action;
+use Illuminate\Support\Facades\Storage;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use SpykApp\UppyUpload\Forms\Components\UppyUpload;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Models\Course;
 use App\Settings\CourseSettings;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,41 +33,41 @@ class LessonsRelationManager extends RelationManager
 {
     protected static string $relationship = 'lessons';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make(2)->schema([
-                    Forms\Components\TextInput::make('title.en')
+        return $schema
+            ->components([
+                Grid::make(2)->schema([
+                    TextInput::make('title.en')
                         ->label('Title (English)')
                         ->required()
                         ->maxLength(255),
-                    Forms\Components\TextInput::make('title.ar')
+                    TextInput::make('title.ar')
                         ->label('Title (Arabic)')
                         ->required()
                         ->maxLength(255),
                 ]),
 
-                Forms\Components\Grid::make(2)->schema([
-                    Forms\Components\TextInput::make('slug')
+                Grid::make(2)->schema([
+                    TextInput::make('slug')
                         ->required()
                         ->maxLength(255)
                         ->unique(table: 'lessons', ignoreRecord: true),
-                    Forms\Components\TextInput::make('order')
+                    TextInput::make('order')
                         ->numeric()
                         ->required()
                         ->default(0),
                 ]),
 
-                Forms\Components\Textarea::make('description.en')
+                Textarea::make('description.en')
                     ->label('Description (English)')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('description.ar')
+                Textarea::make('description.ar')
                     ->label('Description (Arabic)')
                     ->columnSpanFull(),
 
                 // ── Video section ──────────────────────────────────
-                Forms\Components\Select::make('video_provider')
+                Select::make('video_provider')
                     ->label('Video Source')
                     ->options([
                         'upload'   => '📁 Upload Video File',
@@ -63,25 +81,53 @@ class LessonsRelationManager extends RelationManager
                     ->live() // re-render when changed
                     ->columnSpanFull(),
 
-                // Show file upload only when provider = 'upload'
-                Forms\Components\FileUpload::make('video_file_path')
+                // Show current video placeholder if already uploaded to avoid loading the entire video into Uppy
+                \Filament\Forms\Components\Placeholder::make('current_video')
+                    ->label('Current Video File')
+                    ->content(fn (?\Illuminate\Database\Eloquent\Model $record) => $record?->video_file_path ? basename($record->video_file_path) : 'None')
+                    ->visible(fn (Get $get, string $operation, ?\Illuminate\Database\Eloquent\Model $record) => 
+                        $operation === 'edit' && 
+                        $get('video_provider') === 'upload' && 
+                        !$get('replace_video') && 
+                        $record?->video_file_path
+                    ),
+
+                // Toggle to replace the existing video
+                Toggle::make('replace_video')
+                    ->label('Upload New Video (Replace existing)')
+                    ->live()
+                    ->dehydrated(false)
+                    ->afterStateUpdated(function (Set $set, $state, ?\Illuminate\Database\Eloquent\Model $record) {
+                        if ($state) {
+                            $set('video_file_path', null);
+                        } else {
+                            $set('video_file_path', $record?->video_file_path);
+                        }
+                    })
+                    ->visible(fn (Get $get, string $operation, ?\Illuminate\Database\Eloquent\Model $record) => 
+                        $operation === 'edit' && 
+                        $get('video_provider') === 'upload' && 
+                        $record?->video_file_path
+                    ),
+
+                // Show UppyUpload only on create, or if replace_video is toggled, or if no video exists yet
+                UppyUpload::make('video_file_path')
                     ->label('Video File')
                     ->acceptedFileTypes(
                         array_map('trim', explode(',', app(CourseSettings::class)->allowed_video_types))
                     )
-                    ->maxSize(app(CourseSettings::class)->max_video_upload_mb * 1024) // MB → KB for Filament
+                    ->maxFileSize(app(CourseSettings::class)->max_video_upload_mb * 1024 * 1024) // MB → Bytes for Uppy
                     ->disk('local')
                     ->directory('lessons/videos')
-                    ->visibility('private')
                     ->helperText(fn () => 'Max size: ' . app(CourseSettings::class)->max_video_upload_mb . ' MB. Stored privately — users cannot download it directly.')
                     ->hintAction(
-                        Forms\Components\Actions\Action::make('chooseExisting')
+                        Action::make('chooseExisting')
                             ->label('📂 Choose Existing Server File')
-                            ->form([
-                                Forms\Components\Select::make('existing_video')
+                            ->schema([
+                                Select::make('existing_video')
                                     ->label('Select from storage/app/lessons/videos')
                                     ->options(function () {
-                                        $files = \Illuminate\Support\Facades\Storage::disk('local')->files('lessons/videos');
+                                        $files = Storage::disk('local')->files('lessons/videos');
                                         return collect($files)
                                             ->filter(fn ($file) => !str_starts_with(basename($file), '.')) // Ignore hidden files
                                             ->mapWithKeys(fn ($file) => [$file => basename($file)])
@@ -90,15 +136,18 @@ class LessonsRelationManager extends RelationManager
                                     ->searchable()
                                     ->required(),
                             ])
-                            ->action(function (\Filament\Forms\Set $set, array $data) {
+                            ->action(function (Set $set, array $data) {
                                 $set('video_file_path', $data['existing_video']);
                             })
                     )
                     ->columnSpanFull()
-                    ->visible(fn (Get $get): bool => $get('video_provider') === 'upload'),
+                    ->visible(fn (Get $get, string $operation, ?\Illuminate\Database\Eloquent\Model $record): bool => 
+                        $get('video_provider') === 'upload' && 
+                        ($operation === 'create' || empty($record?->video_file_path) || $get('replace_video'))
+                    ),
 
                 // Show URL input for all other providers
-                Forms\Components\TextInput::make('video_url')
+                TextInput::make('video_url')
                     ->label('Video URL')
                     ->url()
                     ->maxLength(1000)
@@ -106,16 +155,16 @@ class LessonsRelationManager extends RelationManager
                     ->columnSpanFull()
                     ->visible(fn (Get $get): bool => $get('video_provider') !== 'upload' && $get('video_provider') !== null),
 
-                Forms\Components\TextInput::make('duration_seconds')
+                TextInput::make('duration_seconds')
                     ->label('Duration (seconds)')
                     ->numeric()
                     ->helperText('e.g. 623 for 10 min 23 sec'),
 
-                Forms\Components\Grid::make(2)->schema([
-                    Forms\Components\Toggle::make('is_published')
+                Grid::make(2)->schema([
+                    Toggle::make('is_published')
                         ->label('Published')
                         ->default(false),
-                    Forms\Components\Toggle::make('is_preview')
+                    Toggle::make('is_preview')
                         ->label('Free Preview (no login needed)')
                         ->default(false),
                 ]),
@@ -128,9 +177,9 @@ class LessonsRelationManager extends RelationManager
             ->recordTitleAttribute('title')
             ->reorderable('order')
             ->columns([
-                Tables\Columns\TextColumn::make('order')->sortable()->width(60),
-                Tables\Columns\TextColumn::make('title.en')->label('Title')->searchable(),
-                Tables\Columns\BadgeColumn::make('video_provider')
+                TextColumn::make('order')->sortable()->width(60),
+                TextColumn::make('title.en')->label('Title')->searchable(),
+                BadgeColumn::make('video_provider')
                     ->label('Source')
                     ->colors([
                         'success' => 'upload',
@@ -138,18 +187,18 @@ class LessonsRelationManager extends RelationManager
                         'info'    => 'vimeo',
                         'gray'    => fn ($state) => in_array($state, ['hls', 'direct']),
                     ]),
-                Tables\Columns\IconColumn::make('is_published')->boolean(),
-                Tables\Columns\IconColumn::make('is_preview')->boolean()->label('Free'),
+                IconColumn::make('is_published')->boolean(),
+                IconColumn::make('is_preview')->boolean()->label('Free'),
             ])
             ->filters([])
-            ->headerActions([Tables\Actions\CreateAction::make()])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->headerActions([CreateAction::make()])
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

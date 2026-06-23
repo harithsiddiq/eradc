@@ -2,18 +2,19 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Illuminate\Database\Eloquent\Builder;
 use App\Mail\AnnouncementEmail;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Mail;
@@ -22,13 +23,13 @@ class SendEmailCampaign extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-envelope';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-envelope';
 
-    protected static ?string $navigationGroup = 'Communication';
+    protected static string | \UnitEnum | null $navigationGroup = 'Communication';
 
     protected static ?int $navigationSort = 1;
 
-    protected static string $view = 'filament.pages.send-email-campaign';
+    protected string $view = 'filament.pages.send-email-campaign';
 
     public static function getNavigationLabel(): string
     {
@@ -56,10 +57,10 @@ class SendEmailCampaign extends Page implements HasForms
         $this->updateRecipientCount();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('📬 Audience')
                     ->description('Choose who will receive this email.')
                     ->schema([
@@ -107,7 +108,7 @@ class SendEmailCampaign extends Page implements HasForms
         $this->recipientCount = $this->buildQuery()->count();
     }
 
-    protected function buildQuery(): \Illuminate\Database\Eloquent\Builder
+    protected function buildQuery(): Builder
     {
         $audience = data_get($this->data, 'audience', 'all');
 

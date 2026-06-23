@@ -2,10 +2,20 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Mail\EnrollmentConfirmationEmail;
 use App\Models\Course;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -23,11 +33,11 @@ class EnrollmentsRelationManager extends RelationManager
         return false;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('course_id')
+        return $schema
+            ->components([
+                Select::make('course_id')
                     ->label('Course')
                     ->options(Course::where('is_published', true)->pluck('title', 'id')
                         ->mapWithKeys(fn ($title, $id) => [$id => is_array($title) ? ($title['en'] ?? $title['ar'] ?? 'Course') : $title])
@@ -36,7 +46,7 @@ class EnrollmentsRelationManager extends RelationManager
                     ->required()
                     ->columnSpanFull(),
 
-                Forms\Components\Select::make('status')
+                Select::make('status')
                     ->label('Status')
                     ->options([
                         'active'    => '✅ Active',
@@ -46,14 +56,14 @@ class EnrollmentsRelationManager extends RelationManager
                     ->default('active')
                     ->required(),
 
-                Forms\Components\TextInput::make('progress')
+                TextInput::make('progress')
                     ->label('Progress (%)')
                     ->numeric()
                     ->default(0)
                     ->minValue(0)
                     ->maxValue(100),
 
-                Forms\Components\DateTimePicker::make('enrolled_at')
+                DateTimePicker::make('enrolled_at')
                     ->label('Enrolled At')
                     ->default(now()),
             ]);
@@ -64,31 +74,31 @@ class EnrollmentsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('course_id')
             ->columns([
-                Tables\Columns\TextColumn::make('course.title')
+                TextColumn::make('course.title')
                     ->label('Course')
                     ->getStateUsing(fn ($record) => $record->course?->getTranslation('title', 'en') ?? 'N/A')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\BadgeColumn::make('status')
+                BadgeColumn::make('status')
                     ->colors([
                         'success' => 'active',
                         'warning' => 'expired',
                         'danger'  => 'cancelled',
                     ]),
 
-                Tables\Columns\TextColumn::make('progress')
+                TextColumn::make('progress')
                     ->label('Progress')
                     ->formatStateUsing(fn ($state) => $state . '%')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Enrolled')
                     ->dateTime()
                     ->sortable(),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label('Assign Course')
                     ->afterCreate(function ($record) {
                         // Send enrollment confirmation email to user (queued)
@@ -102,13 +112,13 @@ class EnrollmentsRelationManager extends RelationManager
                         }
                     }),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->label('Revoke'),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make()->label('Revoke'),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()->label('Revoke Selected'),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()->label('Revoke Selected'),
                 ]),
             ]);
     }

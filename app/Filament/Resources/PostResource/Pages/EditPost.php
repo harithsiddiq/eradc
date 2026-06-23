@@ -2,19 +2,21 @@
 
 namespace App\Filament\Resources\PostResource\Pages;
 
+use LaraZeus\SpatieTranslatable\Resources\Pages\EditRecord\Concerns\Translatable;
+use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\PostResource;
 use App\Models\Media;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Resources\Pages\EditRecord\Concerns\Translatable as EditTranslatable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class EditPost extends EditRecord
 {
-    use EditTranslatable {
-        EditTranslatable::updatedActiveLocale as traitUpdatedActiveLocale;
+    use Translatable {
+        Translatable::updatedActiveLocale as traitUpdatedActiveLocale;
     }
 
     protected static string $resource = PostResource::class;
@@ -22,8 +24,8 @@ class EditPost extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\LocaleSwitcher::make(),
-            Actions\DeleteAction::make(),
+            LocaleSwitcher::make(),
+            DeleteAction::make(),
         ];
     }
 

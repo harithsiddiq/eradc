@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Notifications\VerifyEmailNotification;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
@@ -68,12 +70,12 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return $this->type === 'admin';
     }
 
-    public function enrollments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
     }
 
-    public function courses(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'enrollments');
     }

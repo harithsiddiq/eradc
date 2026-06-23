@@ -2,9 +2,18 @@
 
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,11 +24,11 @@ class EnrollmentsRelationManager extends RelationManager
 
     protected static ?string $title = 'Enrolled Users';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('user_id')
+        return $schema
+            ->components([
+                Select::make('user_id')
                     ->label('User')
                     ->options(
                         User::orderBy('name')
@@ -30,7 +39,7 @@ class EnrollmentsRelationManager extends RelationManager
                     ->required()
                     ->columnSpanFull(),
 
-                Forms\Components\Select::make('status')
+                Select::make('status')
                     ->label('Status')
                     ->options([
                         'active'    => '✅ Active',
@@ -40,7 +49,7 @@ class EnrollmentsRelationManager extends RelationManager
                     ->default('active')
                     ->required(),
 
-                Forms\Components\TextInput::make('progress')
+                TextInput::make('progress')
                     ->label('Progress (%)')
                     ->numeric()
                     ->default(0)
@@ -54,42 +63,42 @@ class EnrollmentsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('user_id')
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label('Name')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('user.email')
+                TextColumn::make('user.email')
                     ->label('Email')
                     ->searchable(),
 
-                Tables\Columns\BadgeColumn::make('status')
+                BadgeColumn::make('status')
                     ->colors([
                         'success' => 'active',
                         'warning' => 'expired',
                         'danger'  => 'suspended',
                     ]),
 
-                Tables\Columns\TextColumn::make('progress')
+                TextColumn::make('progress')
                     ->label('Progress')
                     ->formatStateUsing(fn ($state) => $state . '%')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Enrolled')
                     ->dateTime()
                     ->sortable(),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()->label('Add User'),
+                CreateAction::make()->label('Add User'),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->label('Remove'),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make()->label('Remove'),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()->label('Remove Selected'),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()->label('Remove Selected'),
                 ]),
             ]);
     }
