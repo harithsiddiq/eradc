@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -88,7 +89,7 @@ class AuthController extends Controller
                 $region = $json['region'] ?? null;
                 $city = $json['city'] ?? null;
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
 
         $user = DB::transaction(function () use ($data, $ip, $country, $region, $city) {

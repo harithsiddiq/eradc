@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\CourseResource\Pages;
 
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\CourseResource\RelationManagers\EnrollmentsRelationManager;
 use App\Filament\Resources\CourseResource;
 use App\Filament\Resources\CourseResource\RelationManagers\LessonsRelationManager;
 use Filament\Actions;
@@ -14,7 +16,7 @@ class EditCourse extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 
@@ -22,7 +24,7 @@ class EditCourse extends EditRecord
     {
         return [
             LessonsRelationManager::class,
-            \App\Filament\Resources\CourseResource\RelationManagers\EnrollmentsRelationManager::class,
+            EnrollmentsRelationManager::class,
         ];
     }
 }

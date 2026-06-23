@@ -2,26 +2,27 @@
 
 namespace App\Filament\Resources\PostResource\Pages;
 
+use LaraZeus\SpatieTranslatable\Resources\Pages\CreateRecord\Concerns\Translatable;
+use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
 use App\Filament\Resources\PostResource;
 use App\Models\Media;
 use Filament\Actions;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Resources\Pages\CreateRecord\Concerns\Translatable as CreateTranslatable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CreatePost extends CreateRecord
 {
-    use CreateTranslatable;
+    use Translatable;
 
     protected static string $resource = PostResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\LocaleSwitcher::make(),
+            LocaleSwitcher::make(),
         ];
     }
 

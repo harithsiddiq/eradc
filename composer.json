@@ -7,12 +7,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "filament/filament": "^3.3",
-        "filament/spatie-laravel-settings-plugin": "^3.2",
-        "filament/spatie-laravel-translatable-plugin": "^3.2",
+        "filament/filament": "^4.0",
+        "filament/spatie-laravel-settings-plugin": "^4.0",
+        "lara-zeus/spatie-translatable": "^1.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "romanzipp/laravel-seo": "^2.9"
+        "romanzipp/laravel-seo": "^2.9",
+        "spykapps/filament-uppy-upload": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

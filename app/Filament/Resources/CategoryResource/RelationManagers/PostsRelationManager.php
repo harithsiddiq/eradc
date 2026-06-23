@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Filament\Resources\PostResource;
 use App\Models\Media;
 use Filament\Facades\Filament;
@@ -13,10 +21,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextInput as FormsTextInput;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\Concerns\Translatable as RelationTranslatable;
+use LaraZeus\SpatieTranslatable\Resources\RelationManagers\Concerns\Translatable as RelationTranslatable;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -31,14 +36,14 @@ class PostsRelationManager extends RelationManager
 
     protected static ?string $title = 'المنشورات';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Wizard::make([
                     Step::make('التفاصيل')
                         ->schema([
-                            TextInput::make('title')
+                            FormsTextInput::make('title')
                                 ->label('العنوان')
                                 ->required()
                                 ->live(onBlur: true)
@@ -47,7 +52,7 @@ class PostsRelationManager extends RelationManager
                                         $set('slug', Str::slug($state));
                                     }
                                 }),
-                            TextInput::make('slug')
+                            FormsTextInput::make('slug')
                                 ->label('الرابط')
                                 ->required()
                                 ->unique(ignoreRecord: true),
@@ -129,27 +134,27 @@ class PostsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->label('العنوان')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('slug')
+                TextColumn::make('slug')
                     ->label('الرابط')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->label('الحالة')
                     ->badge(),
-                Tables\Columns\TextColumn::make('published_at')
+                TextColumn::make('published_at')
                     ->label('وقت النشر')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('الإنشاء')
                     ->dateTime()
                     ->sortable(),
             ])
             ->headerActions([
-                Tables\Actions\Action::make('create')
+                Action::make('create')
                     ->label('إنشاء')
                     ->icon('heroicon-o-plus')
                     ->url(function (): string {
@@ -159,16 +164,16 @@ class PostsRelationManager extends RelationManager
                         return $categoryId ? ($base.'?category_id='.$categoryId) : $base;
                     }),
             ])
-            ->actions([
-                Tables\Actions\Action::make('edit')
+            ->recordActions([
+                Action::make('edit')
                     ->label('تحرير')
                     ->icon('heroicon-o-pencil-square')
                     ->url(fn ($record) => PostResource::getUrl('edit', ['record' => $record])),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -2,13 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
+use App\Filament\Resources\UserResource\Pages\ViewUser;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\EnrollmentsRelationManager;
 use App\Models\User;
-use Filament\Forms\Form;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,7 +20,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user';
 
     public static function getNavigationLabel(): string
     {
@@ -29,15 +32,15 @@ class UserResource extends Resource
         return false;
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([]);
+        return $schema->components([]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('المعلومات الأساسية')
                     ->schema([
                         TextEntry::make('name')->label('الاسم'),
@@ -61,46 +64,46 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('الاسم')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label('البريد الإلكتروني')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->label('النوع')
                     ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('level')
+                TextColumn::make('level')
                     ->label('المستوى')
                     ->badge()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('signup_location')
+                TextColumn::make('signup_location')
                     ->label('الموقع')
                     ->getStateUsing(fn ($record) => collect([$record->signup_country, $record->signup_region, $record->signup_city])->filter()->implode('، '))
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('signup_country')
+                TextColumn::make('signup_country')
                     ->label('الدولة')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('signup_city')
+                TextColumn::make('signup_city')
                     ->label('المدينة')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('signup_ip')
+                TextColumn::make('signup_ip')
                     ->label('IP')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('email_verified_at')
                     ->label('تاريخ التحقق')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('الإنشاء')
                     ->dateTime()
                     ->sortable(),
@@ -108,10 +111,10 @@ class UserResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
-            ->bulkActions([]);
+            ->toolbarActions([]);
     }
 
     public static function getRelations(): array
@@ -124,8 +127,8 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'view' => Pages\ViewUser::route('/{record}'),
+            'index' => ListUsers::route('/'),
+            'view' => ViewUser::route('/{record}'),
         ];
     }
 }
