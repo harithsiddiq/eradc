@@ -100,7 +100,7 @@ class EnrollmentsRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()
                     ->label('Assign Course')
-                    ->afterCreate(function ($record) {
+                    ->after(function ($record) {
                         // Send enrollment confirmation email to user (queued)
                         $user   = $this->getOwnerRecord();
                         $course = Course::find($record->course_id);
